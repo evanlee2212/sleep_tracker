@@ -29,9 +29,7 @@ class MySoundPage extends StatefulWidget {
 }
 
 class _MySoundPageState extends State<MySoundPage> {
-  /**
-   * Todo: Add soundbar?
-   */
+  /// Todo: Add soundbar?
 
   @override
   Widget build(BuildContext context) {
