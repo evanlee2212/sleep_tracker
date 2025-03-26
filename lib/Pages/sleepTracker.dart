@@ -1,9 +1,6 @@
-//User Story:  As a user, I want to be able to record how long I sleep for on a given night
-// Priority: Medium-High
-// Estimate: 2 class days
-// Acceptance Criteria: User through a click of a button starts sleep timer when the user goes to sleep. Button also clicked when the user wakes up to track sleep duration.
-//For the sake of demonstration, initial prototype may have 10 seconds represent 1 hour to illustrate a full nights sleep on a smaller scale
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'main.dart';
 
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
@@ -13,20 +10,81 @@ class SleepTracker extends StatefulWidget {
 }
 
 class _SleepTrackerState extends State<SleepTracker> {
+  bool _isPlaying = false;
+  Timer? _timer;
+  int _elapsedTime = 0; // In seconds for simplicity
+
+  void _startTimer() {
+    setState(() {
+      _isPlaying = true;
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _elapsedTime++;
+      });
+    });
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+      setState(() {
+        _isPlaying = false;
+      });
+      _showSleepDuration();
+    }
+  }
+
+  void _showSleepDuration() {
+    final durationInHours = (_elapsedTime / 10).toStringAsFixed(2); // 10 seconds = 1 hour
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sleep Duration'),
+        content: Text('You slept for $durationInHours hours.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).primaryColor;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Sleep Tracker')),
-      body: const Center(
-        child: Text('Sleep tracker UI goes here.'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Center(child: Text('Track Sleep Duration Below.')),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                key: const Key('play button'),
+                onPressed: _isPlaying ? null : _startTimer,
+                iconSize: 48.0,
+                icon: const Icon(Icons.play_arrow),
+                color: color,
+              ),
+              IconButton(
+                key: const Key('stop button'),
+                onPressed: _isPlaying ? _stopTimer : null,
+                iconSize: 48.0,
+                icon: const Icon(Icons.stop),
+                color: color,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
-
-//buttons needed for sleep tracker
-//startTimer:
-//endTimer
-
-//widget showing time passing by on the corner of the app
 //Still need to implement these for user story 1
