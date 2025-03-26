@@ -61,7 +61,7 @@ class _SleepTrackerState extends State<SleepTracker> {
 
   //currently working on this
   void _sleepQualityInput() {
-    final sleepQualityRank = (_sleepRank /10 )
+   // final sleepQualityRank = (_sleepRank /10 )
 
 
   }
