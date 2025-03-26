@@ -53,6 +53,9 @@ class _SleepTrackerState extends State<SleepTracker> {
     );
   }
 
+  //Implement sleep quality function to rank sleep after sleeps completion
+ //void _sleepQuality();
+
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).primaryColor;
