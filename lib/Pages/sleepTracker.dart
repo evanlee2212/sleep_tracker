@@ -12,7 +12,13 @@ class SleepTracker extends StatefulWidget {
 class _SleepTrackerState extends State<SleepTracker> {
   bool _isPlaying = false;
   Timer? _timer;
+  int _sleepRank = 10;
   int _elapsedTime = 0; // In seconds for simplicity
+
+
+
+  //Sleep Quality: User inputs a number 1-10 which is tracked.
+  //sleep quality: Number is saved, closer to 10, better quality sleep indicator
 
   void _startTimer() {
     setState(() {
@@ -53,8 +59,16 @@ class _SleepTrackerState extends State<SleepTracker> {
     );
   }
 
-  //Implement sleep quality function to rank sleep after sleeps completion
- //void _sleepQuality();
+  //currently working on this
+  void _sleepQualityInput() {
+    final sleepQualityRank = (_sleepRank /10 )
+
+
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +79,7 @@ class _SleepTrackerState extends State<SleepTracker> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Center(child: Text('Track Sleep Duration Below.')),
+          const Center(child: Text('Track Sleep Duration & Quality Below.')),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -83,6 +97,16 @@ class _SleepTrackerState extends State<SleepTracker> {
                 icon: const Icon(Icons.stop),
                 color: color,
               ),
+              IconButton(
+                key: const Key('Input Sleep Quality 1-10'),
+                onPressed: _isPlaying ? _sleepQualityInput :null,
+                iconSize: 48.0,
+                icon: const Icon(Icons.circle_sharp),
+                color: color,
+              ),
+              //IconButton(   Button will implement sleepQuality, a number from 1-10 to track users sleep quality(whether they feel well rested or not)
+                //  key: const Key ('')
+
             ],
           ),
         ],
