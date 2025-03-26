@@ -9,7 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   final SleepDiaryModel diaryModel = SleepDiaryModel();
 
-  MyApp({super.key}); // create one instance
+  MyApp({super.key}); 
 
   @override
   Widget build(BuildContext context) {

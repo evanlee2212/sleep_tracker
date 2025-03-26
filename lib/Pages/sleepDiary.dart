@@ -44,7 +44,6 @@ class _SleepDiaryPageState extends State<SleepDiaryPage> {
         SnackBar(content: Text("Diary entry saved!")),
       );
 
-      // Clear input
       setState(() {
         reflectionController.clear();
         tagsController.clear();

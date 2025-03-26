@@ -34,7 +34,7 @@ class SleepDiaryModel extends ChangeNotifier {
       final wakeTime = entry['wakeTime'] as TimeOfDay;
 
       final bedDate = DateTime(0, 0, 0, bedtime.hour, bedtime.minute);
-      final wakeDate = DateTime(0, 0, 1, wakeTime.hour, wakeTime.minute); // next day
+      final wakeDate = DateTime(0, 0, 1, wakeTime.hour, wakeTime.minute);
 
       final duration = wakeDate.difference(bedDate).inMinutes / 60.0;
       totalHours += duration;
