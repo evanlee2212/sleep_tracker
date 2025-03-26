@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
+import 'package:sleep_app/Pages/sounds.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,23 +40,54 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 100,
 
       ),
-      body: Center(
-        child: InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData()));
+      body: SafeArea(
+        child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
 
-          },
-          child: Container(
-            height: 60,
-            width: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: Colors.deepPurpleAccent,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[
+          //Sleep Data button
+          InkWell(
+            onTap: (){
+             Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData()));
+
+            },
+            child: Container(
+              height: 60,
+              width: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                color: Colors.deepPurpleAccent,
+              ),
+              child: Center(child: Text('Sleep Data', style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+              ))),
             ),
-            child: Center(child: Text('Sleep Data', style: TextStyle(
-              fontSize: 25,
-              color: Colors.white,
-            ))),
+          ),
+          SizedBox(height: 10),
+          //Sounds Button
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MySoundPage(title: 'Sounds')));
+
+              },
+              child: Container(
+                height: 60,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.deepPurpleAccent,
+                ),
+               child: Center(child: Text('Sounds', style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+               ))),
+              ),
+            ),
+           ]
           ),
         ),
       ),
