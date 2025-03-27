@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
+import 'package:sleep_app/Pages/notification.dart';
 
 void main() {
   runApp(const MyApp());
@@ -87,6 +88,31 @@ class _MyHomePageState extends State<MyHomePage> {
                ))),
               ),
             ),
+            //implement sizedBox here
+
+          SizedBox(height: 10),
+              // Notifications Button (NEW)
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NotificationsPage())); // Navigate to the new page
+                },
+                child: Container(
+                  height: 60,
+                  width: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  child: Center(
+                      child: Text('Notifications',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                          ))),
+                ),
+              ),
+
            ]
           ),
         ),
