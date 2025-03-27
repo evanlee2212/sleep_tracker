@@ -17,10 +17,8 @@ class _SleepSoundAppState extends State<SleepSoundApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-      home: SoundTabs(
+    return Scaffold(
+      body: SoundTabs(
         isDarkMode: isDarkMode,
         toggleTheme: () {
           setState(() {
@@ -70,6 +68,7 @@ class _SoundTabsState extends State<SoundTabs> {
     return Scaffold(
       appBar: AppBar(
         title: Text(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
+
         actions: [
           IconButton(
             icon: Icon(widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
