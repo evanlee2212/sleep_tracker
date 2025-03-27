@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //Sounds Button
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MySoundPage(title: 'Sounds')));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepSoundApp()));
 
               },
               child: Container(
