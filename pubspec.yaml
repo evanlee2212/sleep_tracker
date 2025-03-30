@@ -37,6 +37,7 @@ dependencies:
   audioplayers: ^5.2.0
   file_picker: ^9.2.2
   shared_preferences: ^2.0.15
+  awesome_notifications: ^0.10.1
 
 dev_dependencies:
   flutter_test:
