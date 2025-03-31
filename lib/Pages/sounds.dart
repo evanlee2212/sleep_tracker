@@ -127,8 +127,11 @@ class SoundPlayerPage extends StatefulWidget {
 }
 
 class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderStateMixin {
-  List<String> allSounds = ['assets/brown_noise.mp3', 'assets/rain.mp3',
-    'assets/ocean.mp3', 'assets/white_noise.mp3', 'assets/soft_breeze.mp3', 'assets/white_noise.mp3'];
+  List<String> allSounds = ['assets/brown_noise.mp3', 'assets/crackling_fire.mp3',
+    'assets/day_forest.mp3', 'assets/meditation.mp3', 'assets/night_forest.mp3',
+    'assets/ocean.mp3', 'assets/pencil_writing.mp3', 'assets/rain.mp3',
+    'assets/river.mp3', 'assets/soft_breeze.mp3', 'assets/thunderstorm.mp3',
+    'assets/whirring_fan.mp3', 'assets/white_noise.mp3',];
   List<String> favorites = [];
   String? currentSound;
   double volume = 0.5;
