@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
 

@@ -9,7 +9,7 @@
 import 'package:flutter/material.dart';
 
 class NewSleepEntry extends StatefulWidget {
-  const NewSleepEntry({Key? key}) : super(key: key);
+  const NewSleepEntry({super.key});
 
   @override
   State<NewSleepEntry> createState() => _NewSleepEntryState();
