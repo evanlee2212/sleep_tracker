@@ -361,9 +361,22 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: favorites.map((sound) => ListTile(title: Text(sound.split('/').last))).toList(),
-    );
+    if (favorites.isEmpty) {
+      return Scaffold(
+        body: Center(
+          child: Text("Nothing here yet! Click the heart next to sounds to show them here.",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),)
+        ),
+      );
+    } else {
+      return ListView(
+        children: favorites.map((sound) =>
+            ListTile(title: Text(sound
+                .split('/')
+                .last))).toList(),
+      );
+    }
   }
 }
 
