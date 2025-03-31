@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
+import 'sleepTracker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -67,6 +69,32 @@ class _MyHomePageState extends State<MyHomePage> {
               ))),
             ),
           ),
+            const SizedBox(height: 10),
+            //sleep tracker implementation
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SleepTracker()));
+              },
+              child: Container(
+                height: 60,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.deepPurpleAccent,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Sleep Tracker',
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
           SizedBox(height: 10),
           //Sounds Button
             InkWell(
