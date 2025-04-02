@@ -3,6 +3,7 @@ import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/Pages/notification.dart';
+im
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +12,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); 
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -52,69 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children:[
-          //Sleep Data button
-          InkWell(
-            onTap: (){
-             Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData()));
 
-            },
-            child: Container(
-              height: 60,
-              width: 250,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                color: Colors.deepPurpleAccent,
-              ),
-              child: Center(child: Text('Sleep Data', style: TextStyle(
-                fontSize: 25,
-                color: Colors.white,
-              ))),
-            ),
-          ),
-          SizedBox(height: 10),
-          //Sounds Button
-            InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepSoundApp()));
 
-              },
-              child: Container(
-                height: 60,
-                width: 250,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.deepPurpleAccent,
-                ),
-               child: Center(child: Text('Sounds', style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-               ))),
-              ),
-            ),
-            //implement sizedBox here
-
-          SizedBox(height: 10),
-              // Notifications Button (NEW)
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NotificationsPage())); // Navigate to the new page
-                },
-                child: Container(
-                  height: 60,
-                  width: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  child: Center(
-                      child: Text('Notifications',
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                          ))),
-                ),
-              ),
 
            ]
           ),
