@@ -8,6 +8,8 @@ import 'dart:math';
 void main() => runApp(SleepSoundApp());
 
 class SleepSoundApp extends StatefulWidget {
+  const SleepSoundApp({super.key});
+
   @override
   _SleepSoundAppState createState() => _SleepSoundAppState();
 }
@@ -34,7 +36,7 @@ class SoundTabs extends StatefulWidget {
   final bool isDarkMode;
   final VoidCallback toggleTheme;
 
-  SoundTabs({required this.isDarkMode, required this.toggleTheme});
+  const SoundTabs({super.key, required this.isDarkMode, required this.toggleTheme});
 
   @override
   _SoundTabsState createState() => _SoundTabsState();
@@ -120,7 +122,7 @@ class EqualizerPainter extends CustomPainter {
 
 class SoundPlayerPage extends StatefulWidget {
   final Function(List<String>) onFavoritesChanged;
-  SoundPlayerPage({required this.onFavoritesChanged});
+  const SoundPlayerPage({super.key, required this.onFavoritesChanged});
 
   @override
   _SoundPlayerPageState createState() => _SoundPlayerPageState();
@@ -292,8 +294,7 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
                       onPressed: resetTimer,
                       child: Text('Reset Timer')),
                   Spacer(),
-                  Text(timeLeft.inMinutes.toString().padLeft(2, '0') + ':' +
-                      (timeLeft.inSeconds % 60).toString().padLeft(2, '0')),
+                  Text('${timeLeft.inMinutes.toString().padLeft(2, '0')}:${(timeLeft.inSeconds % 60).toString().padLeft(2, '0')}'),
                   SizedBox(width: 10),
                   SizedBox(
                     height: 30,
@@ -360,7 +361,7 @@ class FavoritesPage extends StatelessWidget {
   final List<String> favorites;
   final Function(List<String>) onFavoritesChanged;
 
-  FavoritesPage({required this.favorites, required this.onFavoritesChanged});
+  const FavoritesPage({super.key, required this.favorites, required this.onFavoritesChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -384,6 +385,8 @@ class FavoritesPage extends StatelessWidget {
 }
 
 class CustomSoundPage extends StatelessWidget {
+  const CustomSoundPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(child: Text('Upload and manage custom sounds'));

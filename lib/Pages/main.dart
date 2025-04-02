@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'sleepDiary.dart';
+import '../dreams/viewmodel/sleepDiaryModel.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,26 +10,31 @@ import 'sleepTracker.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SleepDiaryModel diaryModel = SleepDiaryModel();
 
-  // This widget is the root of your application.
+  MyApp({super.key}); 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Sleep App',
+      debugShowCheckedModeBanner: false,
+      home: MyHomePage(title: 'Flutter Demo Home Page',diaryModel: diaryModel,
+        //home: SleepDiaryPage(diaryModel: diaryModel),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.diaryModel});
 
   final String title;
+  final SleepDiaryModel diaryModel;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -47,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
 
@@ -100,6 +107,31 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 10),
           SizedBox(height: 10),
+
+          //Sleep Diary button
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SleepDiaryPage(diaryModel: widget.diaryModel),
+    ),
+  );
+},
+            child: Container(
+              height: 60,
+              width: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                color: Colors.deepPurpleAccent,
+              ),
+              child: Center(child: Text('Sleep Diary', style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+              ))),
+            ),
+          ),
+          SizedBox(height: 10),
+
           //Sounds Button
             InkWell(
               onTap: (){
