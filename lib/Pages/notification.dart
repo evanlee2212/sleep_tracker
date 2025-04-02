@@ -11,6 +11,7 @@ class NotificationsPage extends StatelessWidget {
       body: Center(
         child: Text('This is the Notifications Page'), // Replace with notification content
       ),
+
     );
   }
 }
