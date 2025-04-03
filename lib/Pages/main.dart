@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/menu_button.dart';
 import 'sleepDiary.dart';
 import '../dreams/viewmodel/sleepDiaryModel.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
@@ -10,13 +11,13 @@ import 'sleepTracker.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final SleepDiaryModel diaryModel = SleepDiaryModel();
 
-  const MyApp({super.key});
+   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           toolbarHeight: 100,
         ),
       ),
-      home: const MyHomePage(title: 'Sweet Dreams'),
+      home: MyHomePage(title: 'Sweet Dreams', diaryModel: diaryModel),
     );
   }
 }
