@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'sleepDiary.dart';
+import '../dreams/viewmodel/sleepDiaryModel.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/Pages/notification.dart';
-import 'package:sleep_app/components/menu_button.dart';
+import 'sleepTracker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,9 +14,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); 
+  final SleepDiaryModel diaryModel = SleepDiaryModel();
 
-  // This widget is the root of your application.
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,9 +34,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.diaryModel});
 
   final String title;
+  final SleepDiaryModel diaryModel;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

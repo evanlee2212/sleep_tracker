@@ -12,7 +12,7 @@ class SleepTracker extends StatefulWidget {
 class _SleepTrackerState extends State<SleepTracker> {
   bool _isPlaying = false;
   Timer? _timer;
-  int _sleepRank = 10;
+  final int _sleepRank = 10;
   int _elapsedTime = 0; // In seconds for simplicity
 
 
