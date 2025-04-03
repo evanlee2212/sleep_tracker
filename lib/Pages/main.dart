@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sleep_app/Pages/resourcesPage.dart';
 import '../components/menu_button.dart';
-import 'sleepDiary.dart';
-import '../dreams/viewmodel/sleepDiaryModel.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
-import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/Pages/notification.dart';
-import 'sleepTracker.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +13,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final SleepDiaryModel diaryModel = SleepDiaryModel();
-
    MyApp({super.key});
 
   @override
@@ -29,16 +25,15 @@ class MyApp extends StatelessWidget {
           toolbarHeight: 100,
         ),
       ),
-      home: MyHomePage(title: 'Sweet Dreams', diaryModel: diaryModel),
+      home: MyHomePage(title: 'Sweet Dreams'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.diaryModel});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
-  final SleepDiaryModel diaryModel;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -53,12 +48,20 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SafeArea(
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                CircleAvatar(
+                  radius: 104,
+                  backgroundColor: Colors.indigo,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo.png'),
+                    radius: 100,
+                  ),
+                ),
                 MenuButton(
                     text: 'Sleep Data',
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
@@ -66,12 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(height: 10),
                 MenuButton(
                     text: 'Resources',
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),
                 ),
                 SizedBox(height: 10),
                 MenuButton(
                     text: 'Notifications',
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage())),
                 ),
                 SizedBox(height: 10),
               ],
