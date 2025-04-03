@@ -27,7 +27,7 @@ class _SleepDataState extends State<SleepData> {
 
       ),
         body: SafeArea(
-            child: Container(
+            child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/resourcesPage.dart';
+import 'package:sleep_app/Pages/settingsPage.dart';
 import '../components/menu_button.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +47,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())),
+            color: Colors.white,
+          )
+        ]
       ),
       body: SafeArea(
           child: SizedBox(
@@ -70,11 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 MenuButton(
                     text: 'Resources',
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),
-                ),
-                SizedBox(height: 10),
-                MenuButton(
-                    text: 'Notifications',
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage())),
                 ),
                 SizedBox(height: 10),
               ],
