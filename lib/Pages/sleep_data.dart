@@ -2,7 +2,7 @@
 //determined by hours, nightmares/dreams, interruptions, etc.
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/new_sleep_entry.dart';
-
+import 'package:sleep_app/components/menu_button.dart';
 
 
 class SleepData extends StatefulWidget {
@@ -25,24 +25,6 @@ class _SleepDataState extends State<SleepData> {
 
       ),
       body: Center(
-        child: InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => NewSleepEntry()));
-
-          },
-          child: Container(
-            height: 60,
-            width: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: Colors.deepPurpleAccent,
-            ),
-            child: Center(child: Text('New Sleep Entry', style: TextStyle(
-              fontSize: 25,
-              color: Colors.white,
-            ))),
-          ),
-        ),
       ),
     );
   }

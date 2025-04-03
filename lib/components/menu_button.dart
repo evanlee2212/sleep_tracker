@@ -16,7 +16,7 @@ class MenuButton extends StatelessWidget {
     this.backgroundColor,
     this.width = 250,
     this.height = 60,
-  });
+});
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +30,16 @@ class MenuButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(40),
           ),
           elevation: 5,
-          shadowColor: Colors.deepPurple.withOpacity(0.3),
+          shadowColor: Colors.deepPurple.withValues(alpha: 0.3),
           padding: const EdgeInsets.all(16),
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
-            ? const CircularProgressIndicator(
-          color: Colors.white,
+          ? const CircularProgressIndicator(
+            color: Colors.white,
           strokeWidth: 3,
         )
-            : AnimatedScale(
+          : AnimatedScale(
           duration: const Duration(milliseconds: 100),
           scale: isLoading ? 0.9 : 1.0,
           child: Text(
@@ -48,10 +48,10 @@ class MenuButton extends StatelessWidget {
               fontSize: 25,
               color: Colors.white,
               fontWeight: FontWeight.w500,
-            ),
+            )
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 }

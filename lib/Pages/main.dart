@@ -3,7 +3,7 @@ import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/Pages/notification.dart';
-im
+import 'package:sleep_app/components/menu_button.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,14 +12,20 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key}); 
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.deepPurpleAccent,
+          toolbarHeight: 100,
+        ),
+      ),
+      home: const MyHomePage(title: 'Sweet Dreams'),
     );
   }
 }
@@ -34,32 +40,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Sweet Dreams'
-        ),
-        backgroundColor: Colors.deepPurpleAccent,
-        toolbarHeight: 100,
-
+        title: Text(widget.title),
       ),
       body: SafeArea(
-        child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:[
-
-
-
-           ]
-          ),
-        ),
-      ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MenuButton(
+                    text: 'Sleep Data',
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+                ),
+                SizedBox(height: 10),
+                MenuButton(
+                    text: 'Resources',
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+                ),
+                SizedBox(height: 10),
+                MenuButton(
+                    text: 'Notifications',
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+                ),
+                SizedBox(height: 10),
+              ],
+            )
+          )
+      )
     );
   }
   }
