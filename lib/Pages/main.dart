@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sleep_app/Pages/statistics.dart';
 import 'sleepDiary.dart';
 import '../dreams/viewmodel/sleepDiaryModel.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
@@ -149,6 +150,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 25,
                   color: Colors.white,
                ))),
+              ),
+            ),
+
+            SizedBox(height: 10),
+
+            //Sounds Button
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => StatisticsPage()));
+
+              },
+              child: Container(
+                height: 60,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.deepPurpleAccent,
+                ),
+                child: Center(child: Text('Statistics', style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ))),
               ),
             ),
             //implement sizedBox here
