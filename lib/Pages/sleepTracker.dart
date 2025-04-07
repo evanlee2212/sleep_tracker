@@ -1,3 +1,4 @@
+//create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'main.dart';
@@ -15,10 +16,8 @@ class _SleepTrackerState extends State<SleepTracker> {
   final int _sleepRank = 10;
   int _elapsedTime = 0; // In seconds for simplicity
 
-
-
-  //Sleep Quality: User inputs a number 1-10 which is tracked.
-  //sleep quality: Number is saved, closer to 10, better quality sleep indicator
+  // 🆕 List to track sleep logs
+  List<Map<String, String>> _sleepLogs = [];
 
   void _startTimer() {
     setState(() {
@@ -38,12 +37,24 @@ class _SleepTrackerState extends State<SleepTracker> {
       setState(() {
         _isPlaying = false;
       });
-      _showSleepDuration();
+      final durationInHours = (_elapsedTime / 10).toStringAsFixed(2);
+      _logSleepSession(durationInHours); // Pass it as parameter
+      _showSleepDuration(durationInHours);
     }
   }
 
-  void _showSleepDuration() {
-    final durationInHours = (_elapsedTime / 10).toStringAsFixed(2); // 10 seconds = 1 hour
+  void _logSleepSession(String durationInHours) {
+    final now = DateTime.now();
+    setState(() {
+      _sleepLogs.add({
+        'time': '${now.hour}:${now.minute.toString().padLeft(2, '0')} - ${now.month}/${now.day}',
+        'duration': '$durationInHours hrs'
+      });
+      _elapsedTime = 0; // Reset AFTER everything is stored
+    });
+  }
+
+  void _showSleepDuration(String durationInHours) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -59,16 +70,10 @@ class _SleepTrackerState extends State<SleepTracker> {
     );
   }
 
-  //currently working on this
+
   void _sleepQualityInput() {
-   // final sleepQualityRank = (_sleepRank /10 )
-
-
+    // Future enhancement: input sleep quality from user
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +82,11 @@ class _SleepTrackerState extends State<SleepTracker> {
     return Scaffold(
       appBar: AppBar(title: const Text('Sleep Tracker')),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const SizedBox(height: 20),
           const Center(child: Text('Track Sleep Duration & Quality Below.')),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -97,21 +104,27 @@ class _SleepTrackerState extends State<SleepTracker> {
                 icon: const Icon(Icons.stop),
                 color: color,
               ),
-              IconButton(
-                key: const Key('Input Sleep Quality 1-10'),
-                onPressed: _isPlaying ? _sleepQualityInput :null,
-                iconSize: 48.0,
-                icon: const Icon(Icons.circle_sharp),
-                color: color,
-              ),
-              //IconButton(   Button will implement sleepQuality, a number from 1-10 to track users sleep quality(whether they feel well rested or not)
-                //  key: const Key ('')
-
             ],
+          ),
+          const Divider(height: 40),
+          const Text('Sleep Log:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _sleepLogs.length,
+              itemBuilder: (context, index) {
+                final log = _sleepLogs[index];
+                return ListTile(
+                  leading: const Icon(Icons.bedtime),
+                  title: Text('Duration: ${log['duration']}'),
+                  subtitle: Text('Time: ${log['time']}'),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 }
+
 //Still need to implement these for user story 1
