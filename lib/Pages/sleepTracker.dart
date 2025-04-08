@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'main.dart';
 
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
