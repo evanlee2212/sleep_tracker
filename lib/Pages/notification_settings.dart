@@ -60,7 +60,7 @@ class _NotificationSettingsState extends State<NotificationSettings> {
     await widget.settingsRepository.loadSettings();
 
     //reschedule notifications
-    await _rescheduleNotifications(); /
+    await _rescheduleNotifications();
   }
 
   Future<void> _rescheduleNotifications() async {
