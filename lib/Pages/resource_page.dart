@@ -1,22 +1,42 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sounds.dart';
 import 'package:sleep_app/components/menu_button.dart';
+import 'package:sleep_app/dreams/contracts/resources_contract.dart';
+import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
+
 
 class ResourcesPage extends StatefulWidget {
-  ResourcesPage({super.key});
+  const ResourcesPage({super.key});
 
   @override
   State<ResourcesPage> createState() => _ResourcesPageState();
 }
 
-class _ResourcesPageState extends State<ResourcesPage> {
+class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContractView {
+  late final ResourcesPresenter _presenter;
+
+  @override
+  void initState() {
+    super.initState();
+    _presenter = ResourcesPresenter(this);
+  }
+
+  @override
+  void navigateToSounds() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepSoundApp()));
+  }
+
+  @override
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Resources'
+            'Resources'
         ),
         backgroundColor: Colors.deepPurpleAccent,
         toolbarHeight: 100,
@@ -30,7 +50,7 @@ class _ResourcesPageState extends State<ResourcesPage> {
             children: [
               MenuButton(
                   text: 'Sounds',
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepSoundApp()))
+                  onPressed: () => _presenter.onSoundsPressed(),
               ),
 
             ],

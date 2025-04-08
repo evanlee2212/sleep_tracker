@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_app/Pages/resourcesPage.dart';
-import 'package:sleep_app/Pages/settingsPage.dart';
+import 'package:sleep_app/Pages/resource_page.dart';
+import 'package:sleep_app/Pages/settings_page.dart';
 import '../components/menu_button.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class MenuButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final bool isLoading;
   final Color? backgroundColor;
   final double width;
   final double height;
@@ -12,7 +11,6 @@ class MenuButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.isLoading = false,
     this.backgroundColor,
     this.width = 250,
     this.height = 60,
@@ -33,15 +31,7 @@ class MenuButton extends StatelessWidget {
           shadowColor: Colors.deepPurple.withValues(alpha: 0.3),
           padding: const EdgeInsets.all(16),
         ),
-        onPressed: isLoading ? null : onPressed,
-        child: isLoading
-          ? const CircularProgressIndicator(
-            color: Colors.white,
-          strokeWidth: 3,
-        )
-          : AnimatedScale(
-          duration: const Duration(milliseconds: 100),
-          scale: isLoading ? 0.9 : 1.0,
+        onPressed: onPressed,
           child: Text(
             text,
             style: const TextStyle(
@@ -50,7 +40,6 @@ class MenuButton extends StatelessWidget {
               fontWeight: FontWeight.w500,
             )
           ),
-        )
       )
     );
   }
