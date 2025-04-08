@@ -4,7 +4,6 @@ import 'package:sleep_app/Pages/settingsPage.dart';
 import '../components/menu_button.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:sleep_app/Pages/notification.dart';
 
 
 void main() async {
@@ -62,19 +61,22 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 104,
-                  backgroundColor: Colors.indigo,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo.png'),
-                    radius: 100,
+                Transform.translate(
+                  offset: const Offset(0, -150),
+                  child:CircleAvatar(
+                    radius: 104,
+                    backgroundColor: Colors.indigo,
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/logo.png'),
+                      radius: 100,
+                    ),
                   ),
                 ),
                 MenuButton(
                     text: 'Sleep Data',
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 MenuButton(
                     text: 'Resources',
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),

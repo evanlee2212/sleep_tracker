@@ -13,6 +13,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               MenuButton(
-              text: 'New Sleep Entry',
+              text: 'Notifications',
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage())),
             ),
             ]
