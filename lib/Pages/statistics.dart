@@ -68,8 +68,8 @@ class QualityGraphPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 200,
-        height: 200,
+        width: 600,
+        height: 600,
         child: PieChart(
           PieChartData(
             sections: [
