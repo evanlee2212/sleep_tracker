@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sleep_app/Pages/notification.dart';
 import '../components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/settings_contract.dart';
 import 'package:sleep_app/dreams/presenter/settings_presenter.dart';
+import '../components/theme_manager.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -13,11 +15,14 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> implements SettingsContractView{
   late final SettingsPresenter _presenter;
+  bool isDark = false;
 
   @override
   void initState() {
     super.initState();
     _presenter = SettingsPresenter(this);
+    final themeManager = Provider.of<ThemeManager>(context, listen: false);
+    isDark = themeManager.themeMode == ThemeMode.dark;
   }
 
   @override
@@ -26,12 +31,17 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
   }
 
   @override
-  void showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  void swapAppTheme() {
+    final themeManager = Provider.of<ThemeManager>(context, listen: false);
+    setState(() {
+      isDark = !isDark;
+      themeManager.toggleTheme(isDark);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -51,7 +61,11 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
                 text: 'Notifications',
                 onPressed: () => _presenter.onNotificationsPressed(),
               ),
-
+              SizedBox(height: 10),
+              MenuButton(
+                text: 'Switch Theme',
+                onPressed: () => _presenter.onAppThemePressed(),
+              ),
             ],
           ),
         ),

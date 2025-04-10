@@ -7,10 +7,10 @@ class SettingsPresenter {
 
   @override
   void onNotificationsPressed() {
-    try {
-      _view.navigateToNotifications();
-    } catch (e) {
-      _view.showError('Could not open Notification Settings');
-    }
+    _view.navigateToNotifications();
+  }
+
+  @override void onAppThemePressed() {
+    _view.swapAppTheme();
   }
 }

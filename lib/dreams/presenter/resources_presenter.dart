@@ -7,10 +7,6 @@ class ResourcesPresenter {
 
   @override
   void onSoundsPressed() {
-    try {
-      _view.navigateToSounds();
-    } catch (e) {
-      _view.showError('Could not open Sounds');
-    }
+    _view.navigateToSounds();
   }
 }

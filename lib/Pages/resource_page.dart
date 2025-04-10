@@ -27,11 +27,6 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
   }
 
   @override
-  void showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

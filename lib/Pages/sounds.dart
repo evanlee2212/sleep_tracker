@@ -15,28 +15,18 @@ class SleepSoundApp extends StatefulWidget {
 }
 
 class _SleepSoundAppState extends State<SleepSoundApp> {
-  bool isDarkMode = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SoundTabs(
-        isDarkMode: isDarkMode,
-        toggleTheme: () {
-          setState(() {
-            isDarkMode = !isDarkMode;
-          });
-        },
-      ),
+    body: SoundTabs(),
     );
   }
 }
 
 class SoundTabs extends StatefulWidget {
-  final bool isDarkMode;
-  final VoidCallback toggleTheme;
 
-  const SoundTabs({super.key, required this.isDarkMode, required this.toggleTheme});
+  const SoundTabs({super.key});
 
   @override
   _SoundTabsState createState() => _SoundTabsState();
@@ -70,13 +60,6 @@ class _SoundTabsState extends State<SoundTabs> {
     return Scaffold(
       appBar: AppBar(
         title: Text(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
-
-        actions: [
-          IconButton(
-            icon: Icon(widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
-            onPressed: widget.toggleTheme,
-          )
-        ],
       ),
       body: IndexedStack(
         index: _selectedIndex,

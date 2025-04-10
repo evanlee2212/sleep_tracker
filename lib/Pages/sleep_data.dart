@@ -21,6 +21,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   @override
   void initState() {
     super.initState();
+    _diaryModel = SleepDiaryModel();
     _presenter = SleepDataPresenter(this, _diaryModel);
   }
 

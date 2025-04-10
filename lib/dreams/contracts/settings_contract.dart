@@ -1,8 +1,9 @@
 abstract class SettingsContractView {
   void navigateToNotifications();
-  void showError(String message);
+  void swapAppTheme();
 }
 
 abstract class SettingsContractPresenter {
   void onNotificationsPressed();
+  void onAppThemePressed();
 }

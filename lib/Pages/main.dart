@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sleep_app/Pages/resource_page.dart';
 import 'package:sleep_app/Pages/settings_page.dart';
 import '../components/menu_button.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:sleep_app/components/theme_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => ThemeManager(),
+        child: const MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeManager = Provider.of<ThemeManager>(context);
+
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.deepPurpleAccent,
-          toolbarHeight: 100,
-        ),
-      ),
-      home: MyHomePage(title: 'Sweet Dreams'),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeManager.themeMode,
+      home: MyHomePage(title: '',),
     );
   }
 }
@@ -50,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())),
-            color: Colors.white,
           )
         ]
       ),
