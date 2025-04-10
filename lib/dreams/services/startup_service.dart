@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'notification_scheduler.dart';
-import 'settings_repository.dart';
+import '../repositories/settings_repository.dart';
 
 class StartupService {
   final SettingsRepository _repository = SettingsRepository();

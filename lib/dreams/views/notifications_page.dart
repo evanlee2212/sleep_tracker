@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/settings_repository.dart';
+import '../repositories/settings_repository.dart';
 import '../services/notification_scheduler.dart';
 
 class NotificationsPage extends StatefulWidget {
