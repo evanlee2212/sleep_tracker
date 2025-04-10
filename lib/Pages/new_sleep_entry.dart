@@ -2,10 +2,6 @@
 //field to enter sleep hours (enter float)
 //sleep quality rating (int 1-5)
 //interruption count (enter int)
-//sleep details (enter text)
-//enter dreams/nightmares (enter text)
-//be able to make more dream/nightmare fields
-//dream/nightmare radio buttons
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

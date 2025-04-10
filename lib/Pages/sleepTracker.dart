@@ -1,7 +1,7 @@
 //create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'main.dart';
+import '../main.dart';
 
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});

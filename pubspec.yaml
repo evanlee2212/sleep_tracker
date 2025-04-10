@@ -37,8 +37,10 @@ dependencies:
   audioplayers: ^5.2.0
   file_picker: ^9.2.2
   shared_preferences: ^2.0.15
-  firebase_core: ^3.12.1
-  cloud_firestore: ^5.6.5
+  awesome_notifications: ^0.10.1
+  youtube_player_flutter: ^8.1.0
+  firebase_core: ^2.24.2
+  firebase_database: ^10.3.8
 
 dev_dependencies:
   flutter_test:
@@ -63,20 +65,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/brown_noise.mp3
-    - assets/crackling_fire.mp3
-    - assets/day_forest.mp3
-    - assets/meditation.mp3
-    - assets/night_forest.mp3
-    - assets/ocean.mp3
-    - assets/pencil_writing.mp3
-    - assets/rain.mp3
-    - assets/river.mp3
-    - assets/soft_breeze.mp3
-    - assets/thunderstorm.mp3
-    - assets/whirring_fan.mp3
-    - assets/white_noise.mp3
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
