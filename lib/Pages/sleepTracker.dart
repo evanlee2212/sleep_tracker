@@ -13,10 +13,8 @@ class SleepTracker extends StatefulWidget {
 class _SleepTrackerState extends State<SleepTracker> {
   bool _isPlaying = false;
   Timer? _timer;
-  final int _sleepRank = 10;
-  int _elapsedTime = 0; // In seconds for simplicity
+  int _elapsedTime = 0; // In seconds
 
-  // 🆕 List to track sleep logs
   List<Map<String, String>> _sleepLogs = [];
 
   void _startTimer() {
@@ -38,28 +36,75 @@ class _SleepTrackerState extends State<SleepTracker> {
         _isPlaying = false;
       });
       final durationInHours = (_elapsedTime / 10).toStringAsFixed(2);
-      _logSleepSession(durationInHours); // Pass it as parameter
-      _showSleepDuration(durationInHours);
+      _getSleepQualityAndLog(durationInHours); // 🆕 Ask for quality + log
     }
   }
 
-  void _logSleepSession(String durationInHours) {
+  Future<void> _getSleepQualityAndLog(String duration) async {
+    int? selectedQuality = await _showSleepQualityDialog(); // 🆕 Get rating
+
+    if (selectedQuality != null) {
+      _logSleepSession(duration, selectedQuality); // 🆕 Pass rating to logger
+      _showSleepDuration(duration, selectedQuality); // 🆕 Show both
+    }
+  }
+
+  Future<int?> _showSleepQualityDialog() async {
+    int selected = 5; // Default to 5
+
+    return showDialog<int>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Rate How You Felt You've Slept (1-10)"),
+          content: StatefulBuilder(
+            builder: (context, setState) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Slider(
+                  value: selected.toDouble(),
+                  min: 1,
+                  max: 10,
+                  divisions: 9,
+                  label: "$selected",
+                  onChanged: (value) {
+                    setState(() {
+                      selected = value.toInt();
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(selected),
+              child: const Text("Submit"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _logSleepSession(String durationInHours, int sleepQuality) {
     final now = DateTime.now();
     setState(() {
       _sleepLogs.add({
         'time': '${now.hour}:${now.minute.toString().padLeft(2, '0')} - ${now.month}/${now.day}',
-        'duration': '$durationInHours hrs'
+        'duration': '$durationInHours hrs',
+        'quality': '$sleepQuality/10' // 🆕
       });
-      _elapsedTime = 0; // Reset AFTER everything is stored
+      _elapsedTime = 0;
     });
   }
 
-  void _showSleepDuration(String durationInHours) {
+  void _showSleepDuration(String durationInHours, int quality) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sleep Duration'),
-        content: Text('You slept for $durationInHours hours.'),
+        title: const Text('Sleep Summary'),
+        content: Text('You slept for $durationInHours hours.\nSleep quality: $quality/10'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -68,11 +113,6 @@ class _SleepTrackerState extends State<SleepTracker> {
         ],
       ),
     );
-  }
-
-
-  void _sleepQualityInput() {
-    // Future enhancement: input sleep quality from user
   }
 
   @override
@@ -116,7 +156,7 @@ class _SleepTrackerState extends State<SleepTracker> {
                 return ListTile(
                   leading: const Icon(Icons.bedtime),
                   title: Text('Duration: ${log['duration']}'),
-                  subtitle: Text('Time: ${log['time']}'),
+                  subtitle: Text('Time: ${log['time']} \nQuality: ${log['quality']}'), // 🆕
                 );
               },
             ),
@@ -126,5 +166,6 @@ class _SleepTrackerState extends State<SleepTracker> {
     );
   }
 }
+
 
 //Still need to implement these for user story 1
