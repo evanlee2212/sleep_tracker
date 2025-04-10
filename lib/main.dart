@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'Pages/sleep_data.dart';
 import 'Pages/sounds.dart';
-import 'Pages/notifications_page.dart';
+import 'dreams/views/notifications_page.dart';
 import 'Pages/sleepDiary.dart';
 import 'Pages/sleepTracker.dart';
 import 'dreams/viewmodel/sleepDiaryModel.dart';
-import 'Pages/app_initializer.dart';
-import 'Pages/startup_service.dart';
-import 'Pages/settings_repository.dart';
+import 'dreams/services/app_initializer.dart';
+import 'dreams/services/startup_service.dart';
+import 'dreams/services/notification_permissions.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -24,9 +24,7 @@ Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
   if (receivedAction.channelKey == 'scheduled_channel') {
     navigatorKey.currentState?.push(
       MaterialPageRoute(
-        builder: (context) => NotificationsPage(
-          settingsRepository: SettingsRepository(),
-        ),
+        builder: (context) => const NotificationsPage(),
       ),
     );
   }
@@ -74,33 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _checkNotificationPermission();
-  }
-
-  void _checkNotificationPermission() async {
-    final isAllowed = await AwesomeNotifications().isNotificationAllowed();
-    if (!isAllowed && mounted) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Allow Notifications'),
-          content: const Text('Our app would like to send you notifications to remind you to sleep and wake up.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Don't Allow"),
-            ),
-            TextButton(
-              onPressed: () {
-                AwesomeNotifications().requestPermissionToSendNotifications();
-                Navigator.pop(context);
-              },
-              child: const Text('Allow'),
-            ),
-          ],
-        ),
-      );
-    }
+    NotificationHelper.requestPermissionsIfNeeded(context);
   }
 
   Widget buildButton(String text, VoidCallback onTap) {
@@ -135,23 +107,20 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               buildButton('Sleep Data', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepData()));
               }),
               buildButton('Sleep Tracker', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepTracker()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepTracker()));
               }),
               buildButton('Sleep Diary', () {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => SleepDiaryPage(diaryModel: widget.diaryModel)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepDiaryPage(diaryModel: widget.diaryModel)));
               }),
               buildButton('Sounds', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SleepSoundApp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepSoundApp()));
               }),
               buildButton('Notifications', () {
                 Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => NotificationsPage(
-                    settingsRepository: SettingsRepository(),
-                  ),
+                  builder: (context) => const NotificationsPage(),
                 ));
               }),
             ],
@@ -161,3 +130,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
