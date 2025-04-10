@@ -2,7 +2,7 @@
 //number is saved under sleep quality page/side page tracking your personal sleep feelings ranked
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'main.dart';
+import '../main.dart';
 /*
 class SleepRank extends StatefulWidget {
   const SleepRank({super.key});
