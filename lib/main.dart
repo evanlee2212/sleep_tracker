@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleep_app/Pages/resource_page.dart';
 import 'package:sleep_app/Pages/settings_page.dart';
-import '../components/menu_button.dart';
+import 'components/menu_button.dart';
 import 'package:sleep_app/Pages/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/components/theme_manager.dart';
