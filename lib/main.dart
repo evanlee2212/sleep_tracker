@@ -1,8 +1,7 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'Pages/sleep_data.dart';
-import 'Pages/sounds.dart';
 import 'dreams/views/notifications_page.dart';
+import 'dreams/views/resources_page.dart';
 import 'Pages/sleepDiary.dart';
 import 'Pages/sleepTracker.dart';
 import 'dreams/viewmodel/sleepDiaryModel.dart';
@@ -115,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
               buildButton('Sleep Diary', () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => SleepDiaryPage(diaryModel: widget.diaryModel)));
               }),
-              buildButton('Sounds', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepSoundApp()));
+              buildButton('Resources', () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ResourcesPage()));
               }),
               buildButton('Notifications', () {
                 Navigator.push(context, MaterialPageRoute(
@@ -130,5 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 
 
