@@ -1,3 +1,5 @@
+// Varsha
+
 import 'package:flutter/material.dart';
 import '../dreams/viewmodel/sleepDiaryModel.dart';
 
@@ -95,6 +97,14 @@ class _SleepDiaryPageState extends State<SleepDiaryPage> {
             ElevatedButton(
               onPressed: _addEntry,
               child: Text("Save Entry"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pushNamed(context, '/sleepTips');
+              },
+              icon: Icon(Icons.lightbulb_outline),
+              label: Text("View Sleep Tips"),
             ),
             Divider(),
             Text(
