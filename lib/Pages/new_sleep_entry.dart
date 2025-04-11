@@ -20,18 +20,29 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'New Sleep Entry'
-        ),
+        title: const Text('New Sleep Entry'),
         backgroundColor: Colors.deepPurpleAccent,
         toolbarHeight: 100,
-
       ),
       body: Center(
         child: InkWell(
-          onTap: (){
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => NewSleepEntry()));
+          onTap: () {
+            Navigator.pop(context); // Just pop without pushing again
           },
+          child: Container(
+            height: 60,
+            width: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              color: Colors.deepPurpleAccent,
+            ),
+            child: const Center(
+              child: Text(
+                'Save Entry',
+                style: TextStyle(fontSize: 25, color: Colors.white),
+              ),
+            ),
+          ),
         ),
       ),
     );
