@@ -1,7 +1,9 @@
 //import current date
 //field to enter sleep hours (enter float)
-//sleep quality rating (int 1-5)
-//interruption count (enter int)
+//sleep quality rating based on hours of sleep inputted,
+// amount of interruptions, and
+// sleep cycles passed during sleep (int 1-10)
+
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
