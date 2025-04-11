@@ -5,7 +5,7 @@ import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/Pages/sleepTracker.dart';
 import 'package:sleep_app/dreams/contracts/sleep_data_contract.dart';
 import 'package:sleep_app/dreams/presenter/sleep_data_presenter.dart';
-import '../dreams/viewmodel/sleepDiaryModel.dart';
+import '../viewmodel/sleepDiaryModel.dart';
 
 class SleepData extends StatefulWidget {
    const SleepData({super.key});

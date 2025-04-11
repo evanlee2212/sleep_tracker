@@ -1,21 +1,44 @@
 import 'package:flutter/material.dart';
+import 'dreams/views/sleep_data.dart';
+import 'dreams/views/notifications_page.dart';
+import 'dreams/views/resources_page.dart';
+import 'Pages/sleepDiary.dart';
+import 'Pages/sleepTracker.dart';
+import 'dreams/viewmodel/sleepDiaryModel.dart';
+import 'dreams/services/app_initializer.dart';
+import 'dreams/services/startup_service.dart';
+import 'dreams/services/notification_permissions.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:sleep_app/Pages/resource_page.dart';
-import 'package:sleep_app/Pages/settings_page.dart';
+import 'package:sleep_app/dreams/views/resources_page.dart';
+import 'package:sleep_app/dreams/views/settings_page.dart';
 import 'components/menu_button.dart';
-import 'package:sleep_app/Pages/sleep_data.dart';
+import 'package:sleep_app/dreams/views/sleep_data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/components/theme_manager.dart';
 
-void main() async {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await AppInitializer().initialize();
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => ThemeManager(),
-        child: const MyApp(),
-      ),
+    ChangeNotifierProvider(
+      create: (context) => ThemeManager(),
+      child: const MyApp(),
+    ),
   );
+}
+
+@pragma("vm:entry-point")
+Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+  if (receivedAction.channelKey == 'scheduled_channel') {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (context) => const NotificationsPage(),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -24,12 +47,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeManager = Provider.of<ThemeManager>(context);
+    final startupService = StartupService();
 
     return MaterialApp(
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: themeManager.themeMode,
-      home: MyHomePage(title: '',),
+      title: 'Sleep App',
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      home: FutureBuilder(
+        future: startupService.initialize(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return MyHomePage(title: '');
+          } else {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -44,6 +82,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationHelper.requestPermissionsIfNeeded(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,37 +101,35 @@ class _MyHomePageState extends State<MyHomePage> {
         ]
       ),
       body: SafeArea(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Transform.translate(
-                  offset: const Offset(0, -150),
-                  child:CircleAvatar(
-                    radius: 104,
-                    backgroundColor: Colors.indigo,
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/logo.png'),
-                      radius: 100,
-                    ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Transform.translate(
+                offset: const Offset(0, -150),
+                child:CircleAvatar(
+                  radius: 104,
+                  backgroundColor: Colors.indigo,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/logo.png'),
+                    radius: 100,
                   ),
                 ),
-                MenuButton(
-                    text: 'Sleep Data',
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
-                ),
-                SizedBox(height: 20),
-                MenuButton(
-                    text: 'Resources',
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),
-                ),
-                SizedBox(height: 10),
-              ],
-            )
-          )
-      )
+              ),
+              MenuButton(
+                text: 'Sleep Data',
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
+              ),
+              SizedBox(height: 20),
+              MenuButton(
+                text: 'Resources',
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
     );
   }
   }

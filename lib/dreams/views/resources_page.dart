@@ -3,6 +3,7 @@ import 'package:sleep_app/Pages/sounds.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
+import 'package:sleep_app/dreams/views/video_page.dart';
 
 
 class ResourcesPage extends StatefulWidget {
@@ -27,6 +28,11 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
   }
 
   @override
+  void navigateToVideos() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const VideoPage()));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +53,11 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
                   text: 'Sounds',
                   onPressed: () => _presenter.onSoundsPressed(),
               ),
-
+              SizedBox(height: 10),
+              MenuButton(
+                text: 'Videos',
+                onPressed: () => _presenter.onVideosPressed(),
+              ),
             ],
           ),
         ),

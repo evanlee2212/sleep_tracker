@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sleep_app/Pages/notification.dart';
-import '../components/menu_button.dart';
+import 'package:sleep_app/dreams/views/notifications_page.dart';
+import '../../components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/settings_contract.dart';
 import 'package:sleep_app/dreams/presenter/settings_presenter.dart';
-import '../components/theme_manager.dart';
+import '../../components/theme_manager.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

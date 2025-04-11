@@ -9,4 +9,9 @@ class ResourcesPresenter {
   void onSoundsPressed() {
     _view.navigateToSounds();
   }
+
+  @override
+  void onVideosPressed() {
+    _view.navigateToVideos();
+  }
 }
