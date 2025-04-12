@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "6a8720a68b0e048d97b328d853bd0443e2e9cbf49754dd19b36f8347fd1eea7f"
+      sha256: "09b474c0c8117484b80cbebc043801ff91e05cfbd2874d512825c899e1754694"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.2"
+    version: "9.2.3"
   firebase_core:
     dependency: "direct main"
     description:
@@ -213,10 +213,34 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: faa5a76f6380a9b90b53bc3bdcb85bc7926a382e0709b9b5edac9f7746651493
+      sha256: "129a34d1e0fb62e2b488d988a1fc26cc15636357e50944ffee2862efe8929b23"
       url: "https://pub.dev"
     source: hosted
-    version: "2.21.1"
+    version: "2.22.0"
+  firebase_database:
+    dependency: "direct main"
+    description:
+      name: firebase_database
+      sha256: "3b9ca306d26ad243ccbc4c717ff6e8563a080ebe11ee77fa7349b419c894b42d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.5.7"
+  firebase_database_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_database_platform_interface
+      sha256: "5864cc362275465e9bd682b243f19419c9d78b861c2db820241eea596ae3b320"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5+35"
+  firebase_database_web:
+    dependency: transitive
+    description:
+      name: firebase_database_web
+      sha256: a6008395dd20e8b8dde0691b441c181a1216c3866f89f48dcb6889d34fd35905
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5+7"
   firebase_database:
     dependency: "direct main"
     description:
@@ -255,7 +279,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_inappwebview:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_inappwebview
       sha256: "80092d13d3e29b6227e25b67973c67c7210bd5e35c4b747ca908e31eb71a46d5"
@@ -432,14 +456,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -512,14 +528,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: "489024f942069c2920c844ee18bb3d467c69e48955a4f32d1677f71be103e310"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.4"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -532,10 +540,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3ec7210872c4ba945e3244982918e502fa2bfb5230dff6832459ca0e1879b7ad"
+      sha256: c2c8c46297b5d6a80bed7741ec1f2759742c77d272f1a1698176ae828f8e1a18
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.8"
+    version: "2.4.9"
   shared_preferences_foundation:
     dependency: transitive
     description:

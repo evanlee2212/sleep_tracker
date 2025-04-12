@@ -36,9 +36,7 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Resources'
-        ),
+        title: const Text('Resources'),
         backgroundColor: Colors.deepPurpleAccent,
         toolbarHeight: 100,
       ),

@@ -41,9 +41,10 @@ dependencies:
   youtube_player_flutter: ^9.1.1
   firebase_core: ^2.24.2
   firebase_database: ^10.3.8
-  cloud_firestore: ^4.17.5
-  provider: ^6.0.5
-  flutter_inappwebview: ^6.1.5
+
+#dependency_overrides:
+ #flutter_inappwebview: ^6.0.0+6
+
 
 dev_dependencies:
   flutter_test:

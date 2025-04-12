@@ -92,13 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
         actions: [
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())),
           )
-        ]
+        ],
+        title: const Text('Sweet Dreams'),
+        backgroundColor: Colors.deepPurpleAccent,
+        toolbarHeight: 100,
       ),
       body: SafeArea(
         child: Center(

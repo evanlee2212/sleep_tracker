@@ -7,7 +7,6 @@ import Foundation
 
 import audioplayers_darwin
 import awesome_notifications
-import cloud_firestore
 import file_picker
 import firebase_core
 import firebase_database
