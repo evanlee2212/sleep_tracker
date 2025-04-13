@@ -4,7 +4,6 @@
 // amount of interruptions, and
 // sleep cycles passed during sleep (int 1-10)
 
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -54,18 +53,43 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            /// 🔘 Sleep Suggestion Button (NEW)
+            InkWell(
+              onTap: _pickTime,
+              child: Container(
+                height: 60,
+                width: 250,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.deepPurpleAccent,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Sleep Time Suggestion',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             const Text(
               'Pick the time you plan to go to sleep:',
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 10),
+
             ElevatedButton(
               onPressed: _pickTime,
               child: const Text('Choose Sleep Time'),
             ),
             const SizedBox(height: 20),
+
             if (_sleepTime != null) ...[
               Text(
                 'Sleep Time: ${_sleepTime!.format(context)}',
