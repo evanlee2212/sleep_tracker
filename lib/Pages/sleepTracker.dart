@@ -168,4 +168,3 @@ class _SleepTrackerState extends State<SleepTracker> {
 }
 
 
-//Still need to implement these for user story 1
