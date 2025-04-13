@@ -15,28 +15,18 @@ class SleepSoundApp extends StatefulWidget {
 }
 
 class _SleepSoundAppState extends State<SleepSoundApp> {
-  bool isDarkMode = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SoundTabs(
-        isDarkMode: isDarkMode,
-        toggleTheme: () {
-          setState(() {
-            isDarkMode = !isDarkMode;
-          });
-        },
-      ),
+    body: SoundTabs(),
     );
   }
 }
 
 class SoundTabs extends StatefulWidget {
-  final bool isDarkMode;
-  final VoidCallback toggleTheme;
 
-  const SoundTabs({super.key, required this.isDarkMode, required this.toggleTheme});
+  const SoundTabs({super.key});
 
   @override
   _SoundTabsState createState() => _SoundTabsState();
@@ -70,13 +60,6 @@ class _SoundTabsState extends State<SoundTabs> {
     return Scaffold(
       appBar: AppBar(
         title: Text(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
-
-        actions: [
-          IconButton(
-            icon: Icon(widget.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
-            onPressed: widget.toggleTheme,
-          )
-        ],
       ),
       body: IndexedStack(
         index: _selectedIndex,
@@ -129,11 +112,11 @@ class SoundPlayerPage extends StatefulWidget {
 }
 
 class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderStateMixin {
-  List<String> allSounds = ['assets/brown_noise.mp3', 'assets/crackling_fire.mp3',
-    'assets/day_forest.mp3', 'assets/meditation.mp3', 'assets/night_forest.mp3',
-    'assets/ocean.mp3', 'assets/pencil_writing.mp3', 'assets/rain.mp3',
-    'assets/river.mp3', 'assets/soft_breeze.mp3', 'assets/thunderstorm.mp3',
-    'assets/whirring_fan.mp3', 'assets/white_noise.mp3',];
+  List<String> allSounds = ['assets/sounds/brown_noise.mp3', 'assets/sounds/crackling_fire.mp3',
+    'assets/sounds/day_forest.mp3', 'assets/sounds/meditation.mp3', 'assets/sounds/night_forest.mp3',
+    'assets/sounds/ocean.mp3', 'assets/sounds/pencil_writing.mp3', 'assets/sounds/rain.mp3',
+    'assets/sounds/river.mp3', 'assets/sounds/soft_breeze.mp3', 'assets/sounds/thunderstorm.mp3',
+    'assets/sounds/whirring_fan.mp3', 'assets/sounds/white_noise.mp3',];
   List<String> favorites = [];
   String? currentSound;
   double volume = 0.5;
