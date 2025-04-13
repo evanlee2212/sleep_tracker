@@ -48,7 +48,7 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Sleep Entry'),
+        title: const Text('Sleep Time Suggestions'),
         backgroundColor: Colors.deepPurpleAccent,
       ),
       body: Padding(

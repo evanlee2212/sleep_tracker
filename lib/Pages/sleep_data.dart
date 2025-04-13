@@ -64,7 +64,7 @@ class _SleepDataState extends State<SleepData> {
                 ),
                 child: const Center(
                   child: Text(
-                    'New Sleep Entry',
+                    'Sleep Time Suggestions',
                     style: TextStyle(
                       fontSize: 25,
                       color: Colors.white,
