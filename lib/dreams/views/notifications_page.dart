@@ -86,12 +86,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
             const SizedBox(height: 20),
             ListTile(
               title: const Text('Good Morning Notification Time'),
-              subtitle: Text('${_goodMorningTime.format(context)}'),
+              subtitle: Text(_goodMorningTime.format(context)),
               onTap: () => _selectTime(context, true),
             ),
             ListTile(
               title: const Text('Wind Down Notification Time'),
-              subtitle: Text('${_windDownTime.format(context)}'),
+              subtitle: Text(_windDownTime.format(context)),
               onTap: () => _selectTime(context, false),
             ),
           ],
