@@ -25,7 +25,7 @@ class _SleepDataState extends State<SleepData> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
 
-            /// 🔽 Sleep Tracker Button
+
             InkWell(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => SleepTracker()));
@@ -50,7 +50,7 @@ class _SleepDataState extends State<SleepData> {
               ),
             ),
 
-            /// ✅ New Sleep Entry Button (unchanged)
+
             InkWell(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => NewSleepEntry()));
@@ -58,13 +58,14 @@ class _SleepDataState extends State<SleepData> {
               child: Container(
                 height: 60,
                 width: 250,
+                margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
                   color: Colors.deepPurpleAccent,
                 ),
                 child: const Center(
                   child: Text(
-                    'Sleep Time Suggestions',
+                    'Sleep Cycles',
                     style: TextStyle(
                       fontSize: 25,
                       color: Colors.white,
