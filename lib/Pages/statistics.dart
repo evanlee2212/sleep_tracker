@@ -66,15 +66,17 @@ class QuantityGraphPage extends StatelessWidget {
 
 class QualityGraphPage extends StatelessWidget {
   statisticsPresenter presenter = new statisticsPresenter();
+
   @override
   Widget build(BuildContext context) {
+    double radius = MediaQuery.of(context).size.width * 0.4;
     return Center(
       child: SizedBox(
-        width: 2000,
-        height: 2000,
+        width: 1000,
+        height: 1000,
         child: PieChart(
           PieChartData(
-            sections: getSections(presenter.getTags()),
+            sections: getSections(presenter.getTags(), radius),
             sectionsSpace: 2,
             centerSpaceRadius: 0,
             pieTouchData: PieTouchData(enabled: false),
@@ -87,15 +89,21 @@ class QualityGraphPage extends StatelessWidget {
     );
   }
 
-  List<PieChartSectionData> getSections(Map<String, int> tags){
+  List<PieChartSectionData> getSections(Map<String, int> tags, double radius){
     List<PieChartSectionData> sections = [];
     final random = Random();
+    int total = 0;
+
+    for (var entry in tags.values){
+      total += entry;
+    }
 
     for (var entry in tags.entries) {
       PieChartSectionData section = PieChartSectionData(
         value: entry.value.toDouble(),
         title: entry.key,
         color: Color.fromARGB(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+        radius: radius,
       );
 
       sections.add(section);
