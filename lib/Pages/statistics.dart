@@ -103,20 +103,33 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
           SizedBox(
             width: 300,
             height: 300,
-            /** child: PieChart(
-                PieChartData(
-                sections: getSections(tags, radius),
-                sectionsSpace: 2,
-                centerSpaceRadius: 0,
-                pieTouchData: PieTouchData(enabled: false),
-                startDegreeOffset: 0,
+            child: BarChart(
+                BarChartData(
+                  barGroups: [
+                    generateGroupData(1, 10),
+                    generateGroupData(2, 18),
+                    generateGroupData(3, 4),
+                    generateGroupData(4, 11),
+                  ]
                 ),
                 duration: Duration(milliseconds: 150),
                 curve: Curves.linear,
-                ), **/
+                ),
           ),
         ],
       ),
+    );
+  }
+
+  BarChartGroupData generateGroupData(int x, int y){
+    int showingTooltip = -1;
+
+    return BarChartGroupData(
+        x: x,
+        showingTooltipIndicators: showingTooltip == x ? [0] : [],
+        barRods: [
+          BarChartRodData(toY: y.toDouble()),
+        ]
     );
   }
 }
