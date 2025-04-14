@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'dart:math';
 
 import 'package:sleep_app/dreams/presenter/statistics_presenter.dart';
 
@@ -64,19 +65,16 @@ class QuantityGraphPage extends StatelessWidget {
 }
 
 class QualityGraphPage extends StatelessWidget {
+  statisticsPresenter presenter = new statisticsPresenter();
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 600,
-        height: 600,
+        width: 2000,
+        height: 2000,
         child: PieChart(
           PieChartData(
-            sections: [
-              PieChartSectionData(value: 40, color: Colors.blue, title: '40%'),
-              PieChartSectionData(value: 30, color: Colors.red, title: '30%'),
-              PieChartSectionData(value: 30, color: Colors.green, title: '30%'),
-            ],
+            sections: getSections(presenter.getTags()),
             sectionsSpace: 2,
             centerSpaceRadius: 0,
             pieTouchData: PieTouchData(enabled: false),
@@ -87,6 +85,23 @@ class QualityGraphPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<PieChartSectionData> getSections(Map<String, int> tags){
+    List<PieChartSectionData> sections = [];
+    final random = Random();
+
+    for (var entry in tags.entries) {
+      PieChartSectionData section = PieChartSectionData(
+        value: entry.value.toDouble(),
+        title: entry.key,
+        color: Color.fromARGB(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+      );
+
+      sections.add(section);
+    }
+
+    return sections;
   }
 }
 

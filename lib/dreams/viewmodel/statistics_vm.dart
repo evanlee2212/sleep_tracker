@@ -18,6 +18,7 @@ class FakeFirebase {
   
   List<TimeOfDay> bedTime = [];
   List<TimeOfDay> wakeTime = [];
+  List<TimeOfDay> sleepHours = [];
   
   
   FakeFirebase() {
@@ -62,6 +63,32 @@ class statisticsModel extends ChangeNotifier {
       } else {
         Tags[verb] = 1;
       }
+    }
+  }
+
+  void calculateSleepTime() {
+    data.sleepHours.clear();
+
+    int size = min(data.bedTime.length, data.wakeTime.length);
+    final now = DateTime.now();
+
+    for (int i = 0; i < size; i++){
+      final bed = data.bedTime[i];
+      final wake = data.wakeTime[i];
+
+      DateTime bedDateTime = DateTime(now.year, now.month, now.day, bed.hour, bed.minute);
+      DateTime wakeDateTime = DateTime(now.year, now.month, now.day, wake.hour, wake.minute);
+
+      if (wakeDateTime.isBefore(bedDateTime)) {
+        wakeDateTime = wakeDateTime.add(Duration(days: 1));
+      }
+
+      Duration sleepDuration = wakeDateTime.difference(bedDateTime);
+
+      data.sleepHours.add(TimeOfDay(
+        hour: sleepDuration.inHours,
+        minute: sleepDuration.inMinutes % 60,
+      ));
     }
   }
 }
