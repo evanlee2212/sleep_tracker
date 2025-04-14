@@ -91,4 +91,19 @@ class statisticsModel extends ChangeNotifier {
       ));
     }
   }
+
+  Map<String, int> getTags(int days) {
+    Map<String, int> filteredTags = {};
+    if (Tags.length <= days){
+      return Map.from(Tags);
+    } else {
+      int startIndex = Tags.length - days;
+
+      for (int i = startIndex; i < Tags.length; i++){
+        filteredTags[Tags.keys.elementAt(i)] = Tags.values.elementAt(i);
+      }
+    }
+
+    return filteredTags;
+  }
 }

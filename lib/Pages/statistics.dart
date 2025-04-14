@@ -55,11 +55,68 @@ class _GraphTabsState extends State<GraphTabs> {
   }
 }
 
-class QuantityGraphPage extends StatelessWidget {
+class QuantityGraphPage extends StatefulWidget {
+  @override
+  State<QuantityGraphPage> createState() => _QuantityGraphPageState();
+}
+
+class _QuantityGraphPageState extends State<QuantityGraphPage> {
+  statisticsPresenter presenter = new statisticsPresenter();
+  String selectedRange = "Week";
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("This is the Quantity Graph Page"),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 80),
+              Text("Select Range:",
+                  style: TextStyle(fontSize: 18)
+              ),
+              SizedBox(width: 10),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: DropdownButton<String>(
+                    value: selectedRange,
+                    items: ["Week", "Month", "Year"]
+                        .map((range) =>
+                        DropdownMenuItem(
+                          value: range,
+                          child: Text(range),
+                        )).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          selectedRange = value;
+                        });
+                      }
+                    },
+                  )
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          SizedBox(
+            width: 300,
+            height: 300,
+            /** child: PieChart(
+                PieChartData(
+                sections: getSections(tags, radius),
+                sectionsSpace: 2,
+                centerSpaceRadius: 0,
+                pieTouchData: PieTouchData(enabled: false),
+                startDegreeOffset: 0,
+                ),
+                duration: Duration(milliseconds: 150),
+                curve: Curves.linear,
+                ), **/
+          ),
+        ],
+      ),
     );
   }
 }
@@ -77,7 +134,7 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
   @override
   Widget build(BuildContext context) {
     double radius = MediaQuery.of(context).size.width * 0.4;
-
+    final tags = presenter.getTagsFor(selectedRange);
 
     return Center(
       child: Column(
@@ -117,7 +174,7 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
               height: 300,
               child: PieChart(
                 PieChartData(
-                  sections: getSections(presenter.getTags(), radius),
+                  sections: getSections(tags, radius),
                   sectionsSpace: 2,
                   centerSpaceRadius: 0,
                   pieTouchData: PieTouchData(enabled: false),
@@ -135,13 +192,26 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
   List<PieChartSectionData> getSections(Map<String, int> tags, double radius){
     List<PieChartSectionData> sections = [];
     final random = Random();
+    int total = 0;
+
+    for (var entry in tags.values){
+      total += entry;
+    }
 
     for (var entry in tags.entries) {
+      double sectionValue = entry.value.toDouble();
+
       PieChartSectionData section = PieChartSectionData(
-        value: entry.value.toDouble(),
+        value: sectionValue,
         title: entry.key,
         color: Color.fromARGB(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
         radius: radius,
+        titleStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+        ),
+        titlePositionPercentageOffset: 0.5
       );
 
       sections.add(section);

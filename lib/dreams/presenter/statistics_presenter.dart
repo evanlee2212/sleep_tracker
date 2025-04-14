@@ -4,8 +4,23 @@ import 'package:sleep_app/dreams/viewmodel/statistics_vm.dart';
 class statisticsPresenter {
   statisticsModel model = new statisticsModel();
 
-  Map<String, int> getTags() {
-    return model.Tags;
-  }
+  Map<String, int> getTagsFor(String range) {
+    int days = 0;
+
+    switch(range) {
+      case "Week":
+        days = 7;
+        break;
+      case "Month":
+        days = 30;
+        break;
+      case "Year":
+        days = 365;
+        break;
+    }
+
+    return model.getTags(days);
+    }
 }
+
 
