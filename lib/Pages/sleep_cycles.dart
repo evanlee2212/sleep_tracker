@@ -84,12 +84,6 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
             ),
             const SizedBox(height: 10),
 
-            ElevatedButton(
-              onPressed: _pickTime,
-              child: const Text('Choose Sleep Time'),
-            ),
-            const SizedBox(height: 20),
-
             if (_sleepTime != null) ...[
               Text(
                 'Sleep Time: ${_sleepTime!.format(context)}',
