@@ -7,10 +7,15 @@ import 'package:sleep_app/Pages/sounds.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sleep_app/Pages/notification.dart';
 import 'sleepTracker.dart';
+import "../firebase_options.dart";
+import 'login_screen.dart'; 
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -21,14 +26,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sleep App',
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Flutter Demo Home Page',diaryModel: diaryModel,
-        //home: SleepDiaryPage(diaryModel: diaryModel),
-      ),
-    );
-  }
+  return MaterialApp(
+    title: 'Sleep App',
+    debugShowCheckedModeBanner: false,
+    //home: MyHomePage(title: 'Flutter Demo Home Page', diaryModel: diaryModel),
+    home: const LoginScreen(), 
+  );
+}
 }
 
 class MyHomePage extends StatefulWidget {
