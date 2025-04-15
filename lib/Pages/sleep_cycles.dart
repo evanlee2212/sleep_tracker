@@ -38,7 +38,7 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
         .add(const Duration(minutes: 15)); // add 15 mins to fall asleep
 
     return List.generate(4, (i) {
-      final suggestionTime = baseTime.add(Duration(minutes: 90 * (i + 3))); // 3 to 6 cycles
+      final suggestionTime = baseTime.add(Duration(minutes: 90 * ((i+1) + 3))); // 3 to 6 cycles
       return DateFormat.jm().format(suggestionTime);
     });
   }
@@ -47,7 +47,7 @@ class _NewSleepEntryState extends State<NewSleepEntry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Sleep Entry'),
+        title: const Text('Sleep Time Suggestions'),
         backgroundColor: Colors.deepPurpleAccent,
       ),
       body: Padding(

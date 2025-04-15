@@ -36,16 +36,16 @@ class _SleepTrackerState extends State<SleepTracker> {
         _isPlaying = false;
       });
       final durationInHours = (_elapsedTime / 10).toStringAsFixed(2);
-      _getSleepQualityAndLog(durationInHours); // 🆕 Ask for quality + log
+      _getSleepQualityAndLog(durationInHours); //
     }
   }
 
   Future<void> _getSleepQualityAndLog(String duration) async {
-    int? selectedQuality = await _showSleepQualityDialog(); // 🆕 Get rating
+    int? selectedQuality = await _showSleepQualityDialog(); //
 
     if (selectedQuality != null) {
-      _logSleepSession(duration, selectedQuality); // 🆕 Pass rating to logger
-      _showSleepDuration(duration, selectedQuality); // 🆕 Show both
+      _logSleepSession(duration, selectedQuality); //
+      _showSleepDuration(duration, selectedQuality); //
     }
   }
 
@@ -93,7 +93,7 @@ class _SleepTrackerState extends State<SleepTracker> {
       _sleepLogs.add({
         'time': '${now.hour}:${now.minute.toString().padLeft(2, '0')} - ${now.month}/${now.day}',
         'duration': '$durationInHours hrs',
-        'quality': '$sleepQuality/10' // 🆕
+        'quality': '$sleepQuality/10'
       });
       _elapsedTime = 0;
     });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleepDiary.dart';
 import 'package:sleep_app/Pages/sleepRank.dart';
+import 'package:sleep_app/Pages/sleep_cycles.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/Pages/sleepTracker.dart';
 import 'package:sleep_app/dreams/contracts/sleep_data_contract.dart';
@@ -34,7 +35,10 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   void navigateToSleepTracker() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => SleepTracker()));
   }
-
+  @override
+  void navigateToNewSleepEntry(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => NewSleepEntry()));
+  }
   @override
   void navigateToSleepRank() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => SleepRank()));
@@ -65,6 +69,11 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
               MenuButton(
                 text: 'Sleep Tracker',
                 onPressed: () => _presenter.onSleepTrackerPressed(),
+              ),
+              const SizedBox(height: 10),
+              MenuButton(
+                text: 'Sleep Cycles',
+                onPressed: () => _presenter.onNewSleepEntryPressed(),
               ),
               const SizedBox(height: 10),
               MenuButton(
