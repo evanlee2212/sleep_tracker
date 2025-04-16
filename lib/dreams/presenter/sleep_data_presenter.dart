@@ -18,13 +18,13 @@ class SleepDataPresenter implements SleepDataContractPresenter {
   }
 
   @override
-  void onNewSleepEntryPressed(){
-    _view.navigateToNewSleepEntry();
+  void onSleepCyclesPressed(){
+    _view.navigateToSleepCycles();
   }
 
   @override
-  void onSleepRankPressed() {
-    _view.navigateToSleepRank();
+  void onSleepStatisticsPressed() {
+    _view.navigateToSleepStatistics();
   }
 
   SleepDiaryModel get diaryModel => _diaryModel;

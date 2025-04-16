@@ -1,13 +1,13 @@
 abstract class SleepDataContractView {
   void navigateToSleepDiary();
   void navigateToSleepTracker();
-  void navigateToSleepRank();
-  void navigateToNewSleepEntry();
+  void navigateToSleepStatistics();
+  void navigateToSleepCycles();
 }
 
 abstract class SleepDataContractPresenter {
   void onSleepDiaryPressed();
   void onSleepTrackerPressed();
-  void onSleepRankPressed();
-  void onNewSleepEntryPressed();
+  void onSleepStatisticsPressed();
+  void onSleepCyclesPressed();
 }

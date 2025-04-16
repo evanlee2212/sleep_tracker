@@ -7,14 +7,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class NewSleepEntry extends StatefulWidget {
-  const NewSleepEntry({super.key});
+class SleepCycles extends StatefulWidget {
+  const SleepCycles({super.key});
 
   @override
-  State<NewSleepEntry> createState() => _NewSleepEntryState();
+  State<SleepCycles> createState() => _NewSleepEntryState();
 }
 
-class _NewSleepEntryState extends State<NewSleepEntry> {
+class _NewSleepEntryState extends State<SleepCycles> {
   TimeOfDay? _sleepTime;
   List<String> _suggestions = [];
 
