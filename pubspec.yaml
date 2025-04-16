@@ -34,13 +34,22 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  audioplayers: ^5.2.0
-  file_picker: ^9.2.2
+  audioplayers: ^6.4.0
+  file_picker: ^10.1.1
   shared_preferences: ^2.0.15
-  firebase_core: ^3.12.1
-  cloud_firestore: ^5.6.5
-  firebase_auth_platform_interface: 7.6.1
-  firebase_auth_web: 5.14.1
+  awesome_notifications: ^0.10.1
+  youtube_player_flutter: ^9.1.1
+  firebase_core: ^3.13.0
+  firebase_database: ^11.3.5
+  cloud_firestore: ^5.6.6
+
+  provider: ^6.0.5
+
+#dependency_overrides:
+ #flutter_inappwebview: ^6.0.0+6
+
+  firebase_auth_platform_interface: ^7.6.2
+  firebase_auth_web: ^5.14.2
   firebase_auth: ^5.5.1
   google_fonts: ^6.1.0
   fl_chart: ^0.70.2
@@ -70,19 +79,20 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/brown_noise.mp3
-    - assets/crackling_fire.mp3
-    - assets/day_forest.mp3
-    - assets/meditation.mp3
-    - assets/night_forest.mp3
-    - assets/ocean.mp3
-    - assets/pencil_writing.mp3
-    - assets/rain.mp3
-    - assets/river.mp3
-    - assets/soft_breeze.mp3
-    - assets/thunderstorm.mp3
-    - assets/whirring_fan.mp3
-    - assets/white_noise.mp3
+    - assets/sounds/brown_noise.mp3
+    - assets/sounds/crackling_fire.mp3
+    - assets/sounds/day_forest.mp3
+    - assets/sounds/meditation.mp3
+    - assets/sounds/night_forest.mp3
+    - assets/sounds/ocean.mp3
+    - assets/sounds/pencil_writing.mp3
+    - assets/sounds/rain.mp3
+    - assets/sounds/river.mp3
+    - assets/sounds/soft_breeze.mp3
+    - assets/sounds/thunderstorm.mp3
+    - assets/sounds/whirring_fan.mp3
+    - assets/sounds/white_noise.mp3
+    - assets/images/logo.png
     - assets/images/background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
