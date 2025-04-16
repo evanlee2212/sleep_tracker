@@ -66,6 +66,8 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
 
   @override
   Widget build(BuildContext context) {
+    final hours = presenter.getHoursFor(selectedRange);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -105,6 +107,7 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
             height: 300,
             child: BarChart(
                 BarChartData(
+                  //barGroups: getGroups(hours)
                   barGroups: [
                     generateGroupData(1, 10),
                     generateGroupData(2, 18),
@@ -132,6 +135,10 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
         ]
     );
   }
+
+  /** List<BarChartRodData> getGroups(hours) {
+    return null;
+  } **/
 }
 
 

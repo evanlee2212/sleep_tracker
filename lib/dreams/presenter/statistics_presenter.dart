@@ -21,6 +21,24 @@ class statisticsPresenter {
 
     return model.getTags(days);
     }
+
+  getHoursFor(String range) {
+    int days = 0;
+
+    switch(range) {
+      case "Week":
+        days = 7;
+        break;
+      case "Month":
+        days = 30;
+        break;
+      case "Year":
+        days = 365;
+        break;
+    }
+
+    return model.getHours(days);
+  }
 }
 
 

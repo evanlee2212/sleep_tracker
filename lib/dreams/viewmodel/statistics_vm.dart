@@ -106,4 +106,12 @@ class statisticsModel extends ChangeNotifier {
 
     return filteredTags;
   }
+
+  getHours(int days) {
+    if (data.sleepHours.length <= days){
+      return List.from(data.sleepHours);
+    }
+
+    return List.from(data.sleepHours.getRange(data.sleepHours.length-days, data.sleepHours.length));
+  }
 }
