@@ -3,6 +3,7 @@ abstract class SleepDataContractView {
   void navigateToSleepTracker();
   void navigateToSleepStatistics();
   void navigateToSleepCycles();
+  void navigateToScreenTime();
 }
 
 abstract class SleepDataContractPresenter {
@@ -10,4 +11,5 @@ abstract class SleepDataContractPresenter {
   void onSleepTrackerPressed();
   void onSleepStatisticsPressed();
   void onSleepCyclesPressed();
+  void onScreenTimePressed();
 }

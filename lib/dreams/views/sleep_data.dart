@@ -44,6 +44,14 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   }
 
   @override
+  void navigateToScreenTime() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ScreenTimePage()),
+    );
+  }
+
+  @override
   void navigateToSleepCycles() {
     Navigator.push(
       context,
@@ -96,12 +104,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
               const SizedBox(height: 10),
               MenuButton(
                 text: 'Screen Time',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ScreenTimePage()),
-                  );
-                },
+                onPressed: () => _presenter.onScreenTimePressed(),
               ),
             ],
           ),
