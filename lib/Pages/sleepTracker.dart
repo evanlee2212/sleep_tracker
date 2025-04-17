@@ -14,7 +14,7 @@ class _SleepTrackerState extends State<SleepTracker> {
   Timer? _timer;
   int _elapsedTime = 0; // In seconds
 
-  List<Map<String, String>> _sleepLogs = [];
+  final List<Map<String, String>> _sleepLogs = [];
 
   void _startTimer() {
     setState(() {

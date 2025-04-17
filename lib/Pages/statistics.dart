@@ -9,6 +9,8 @@ void main() => runApp(MaterialApp(
 ));
 
 class StatisticsPage extends StatefulWidget {
+  const StatisticsPage({super.key});
+
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
 }
@@ -21,6 +23,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 }
 
 class GraphTabs extends StatefulWidget {
+  const GraphTabs({super.key});
+
   @override
   _GraphTabsState createState() => _GraphTabsState();
 }
@@ -56,12 +60,14 @@ class _GraphTabsState extends State<GraphTabs> {
 }
 
 class QuantityGraphPage extends StatefulWidget {
+  const QuantityGraphPage({super.key});
+
   @override
   State<QuantityGraphPage> createState() => _QuantityGraphPageState();
 }
 
 class _QuantityGraphPageState extends State<QuantityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  statisticsPresenter presenter = statisticsPresenter();
   String selectedRange = "Week";
 
   @override
@@ -136,12 +142,14 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
 
 
 class QualityGraphPage extends StatefulWidget {
+  const QualityGraphPage({super.key});
+
   @override
   State<QualityGraphPage> createState() => _QualityGraphPageState();
 }
 
 class _QualityGraphPageState extends State<QualityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  statisticsPresenter presenter = statisticsPresenter();
   String selectedRange = "Week";
 
   @override

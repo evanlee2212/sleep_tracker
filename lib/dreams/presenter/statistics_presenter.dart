@@ -2,7 +2,7 @@ import 'package:sleep_app/Pages/statistics.dart';
 import 'package:sleep_app/dreams/viewmodel/statistics_vm.dart';
 
 class statisticsPresenter {
-  statisticsModel model = new statisticsModel();
+  statisticsModel model = statisticsModel();
 
   Map<String, int> getTagsFor(String range) {
     int days = 0;

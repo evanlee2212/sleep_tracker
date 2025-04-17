@@ -1,8 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sleep_app/dreams/presenter/statistics_presenter.dart';
 
 class FakeFirebase {
   static const List<String> LogTags = [
