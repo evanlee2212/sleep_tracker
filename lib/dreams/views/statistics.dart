@@ -66,7 +66,7 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    final hours = presenter.getHoursFor(selectedRange);
+    final List<TimeOfDay> hours = presenter.getHoursFor(selectedRange);
 
     return Center(
       child: Column(
@@ -76,69 +76,67 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
           Row(
             children: [
               SizedBox(width: 80),
-              Text("Select Range:",
-                  style: TextStyle(fontSize: 18)
-              ),
+              Text("Select Range:", style: TextStyle(fontSize: 18)),
               SizedBox(width: 10),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: DropdownButton<String>(
-                    value: selectedRange,
-                    items: ["Week", "Month", "Year"]
-                        .map((range) =>
-                        DropdownMenuItem(
-                          value: range,
-                          child: Text(range),
-                        )).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          selectedRange = value;
-                        });
-                      }
-                    },
-                  )
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DropdownButton<String>(
+                  value: selectedRange,
+                  items: ["Week", "Month", "Year"]
+                      .map((range) => DropdownMenuItem(
+                    value: range,
+                    child: Text(range),
+                  ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        selectedRange = value;
+                      });
+                    }
+                  },
+                ),
               ),
             ],
           ),
           SizedBox(height: 20),
           SizedBox(
-            width: 300,
+            width: MediaQuery.of(context).size.width,
             height: 300,
             child: BarChart(
-                BarChartData(
-                  //barGroups: getGroups(hours)
-                  barGroups: [
-                    generateGroupData(1, 10),
-                    generateGroupData(2, 18),
-                    generateGroupData(3, 4),
-                    generateGroupData(4, 11),
-                  ]
-                ),
-                duration: Duration(milliseconds: 150),
-                curve: Curves.linear,
-                ),
+              BarChartData(barGroups: getGroups(hours)),
+              duration: Duration(milliseconds: 150),
+              curve: Curves.linear,
+            ),
           ),
         ],
       ),
     );
   }
 
-  BarChartGroupData generateGroupData(int x, int y){
+  List<BarChartGroupData> getGroups(List<TimeOfDay> hours) {
+    List<BarChartGroupData> groupData = [];
+
+    for (int i = 0; i < hours.length; i++) {
+      // Convert TimeOfDay to a double (e.g. 14:30 => 14.5)
+      double totalHours = hours[i].hour + hours[i].minute / 60.0;
+      groupData.add(generateGroupData(i, totalHours));
+    }
+
+    return groupData;
+  }
+
+  BarChartGroupData generateGroupData(int x, double y) {
     int showingTooltip = -1;
 
     return BarChartGroupData(
-        x: x,
-        showingTooltipIndicators: showingTooltip == x ? [0] : [],
-        barRods: [
-          BarChartRodData(toY: y.toDouble()),
-        ]
+      x: x,
+      showingTooltipIndicators: showingTooltip == x ? [0] : [],
+      barRods: [
+        BarChartRodData(toY: y),
+      ],
     );
   }
-
-  /** List<BarChartRodData> getGroups(hours) {
-    return null;
-  } **/
 }
 
 

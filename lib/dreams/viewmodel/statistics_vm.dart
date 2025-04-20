@@ -107,7 +107,7 @@ class statisticsModel extends ChangeNotifier {
     return filteredTags;
   }
 
-  getHours(int days) {
+  List<TimeOfDay> getHours(int days) {
     if (data.sleepHours.length <= days){
       return List.from(data.sleepHours);
     }

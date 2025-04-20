@@ -1,4 +1,5 @@
-import 'package:sleep_app/Pages/statistics.dart';
+import 'package:flutter/material.dart';
+import 'package:sleep_app/dreams/views/statistics.dart';
 import 'package:sleep_app/dreams/viewmodel/statistics_vm.dart';
 
 class statisticsPresenter {
@@ -22,7 +23,7 @@ class statisticsPresenter {
     return model.getTags(days);
     }
 
-  getHoursFor(String range) {
+  List<TimeOfDay> getHoursFor(String range) {
     int days = 0;
 
     switch(range) {

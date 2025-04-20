@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleepDiary.dart';
 import 'package:sleep_app/Pages/sleep_cycles.dart';
-import 'package:sleep_app/Pages/statistics.dart';
+import 'package:sleep_app/dreams/views/statistics.dart';
 import 'package:sleep_app/Pages/screen_time.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/Pages/sleepTracker.dart';
