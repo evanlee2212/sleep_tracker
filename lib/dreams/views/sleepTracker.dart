@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:sleep_app/dreams/presenter/sleepTracker_presenter.dart';
+
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
 
@@ -10,11 +12,11 @@ class SleepTracker extends StatefulWidget {
 }
 
 class _SleepTrackerState extends State<SleepTracker> {
+  sleepTrackerPresenter presenter = new sleepTrackerPresenter();
   bool _isPlaying = false;
   Timer? _timer;
   int _elapsedTime = 0; // In seconds
 
-  List<Map<String, String>> _sleepLogs = [];
 
   void _startTimer() {
     setState(() {
@@ -87,15 +89,10 @@ class _SleepTrackerState extends State<SleepTracker> {
   }
 
   void _logSleepSession(String durationInHours, int sleepQuality) {
-    final now = DateTime.now();
     setState(() {
-      _sleepLogs.add({
-        'time': '${now.hour}:${now.minute.toString().padLeft(2, '0')} - ${now.month}/${now.day}',
-        'duration': '$durationInHours hrs',
-        'quality': '$sleepQuality/10'
-      });
-      _elapsedTime = 0;
+      presenter.addSleepLog(durationInHours, sleepQuality);
     });
+    _elapsedTime = 0;
   }
 
   void _showSleepDuration(String durationInHours, int quality) {
@@ -149,9 +146,9 @@ class _SleepTrackerState extends State<SleepTracker> {
           const Text('Sleep Log:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           Expanded(
             child: ListView.builder(
-              itemCount: _sleepLogs.length,
+              itemCount: presenter.getSleepLogsLength(),
               itemBuilder: (context, index) {
-                final log = _sleepLogs[index];
+                final log = presenter.getLog(index);
                 return ListTile(
                   leading: const Icon(Icons.bedtime),
                   title: Text('Duration: ${log['duration']}'),

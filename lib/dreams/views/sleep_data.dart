@@ -4,7 +4,7 @@ import 'package:sleep_app/Pages/sleep_cycles.dart';
 import 'package:sleep_app/dreams/views/statistics.dart';
 import 'package:sleep_app/Pages/screen_time.dart';
 import 'package:sleep_app/components/menu_button.dart';
-import 'package:sleep_app/Pages/sleepTracker.dart';
+import 'package:sleep_app/dreams/views/sleepTracker.dart';
 import 'package:sleep_app/dreams/contracts/sleep_data_contract.dart';
 import 'package:sleep_app/dreams/presenter/sleep_data_presenter.dart';
 import '../viewmodel/sleepDiaryModel.dart';
