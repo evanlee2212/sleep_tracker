@@ -1,4 +1,4 @@
-import '../models/video_resource.dart';
+import '../models/video.dart';
 
 class VideoRepository {
   List<VideoResource> fetchVideos() {
