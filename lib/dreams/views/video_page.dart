@@ -8,7 +8,6 @@ import '../repositories/playlist_repository.dart';
 import '../presenter/playlist_presenter.dart';
 import 'playlist_detail_page.dart';
 
-/// The “Video Resources” page now shows your playlists at the top.
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
 
@@ -182,7 +181,6 @@ class _VideoPageState extends State<VideoPage>
   }
 }
 
-/// (unchanged) controller & screen for playing a single YouTube video:
 class YoutubePlayerScreen extends StatefulWidget {
   final String videoId;
   const YoutubePlayerScreen({Key? key, required this.videoId})
