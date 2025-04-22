@@ -4,7 +4,7 @@ import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
 import 'package:sleep_app/dreams/views/video_page.dart';
-
+import 'package:sleep_app/dreams/views/assessment_page.dart';  // new
 
 class ResourcesPage extends StatefulWidget {
   const ResourcesPage({super.key});
@@ -13,7 +13,8 @@ class ResourcesPage extends StatefulWidget {
   State<ResourcesPage> createState() => _ResourcesPageState();
 }
 
-class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContractView {
+class _ResourcesPageState extends State<ResourcesPage>
+    implements ResourcesContractView {
   late final ResourcesPresenter _presenter;
 
   @override
@@ -24,12 +25,25 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
 
   @override
   void navigateToSounds() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepSoundApp()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SleepSoundApp()),
+    );
   }
 
   @override
   void navigateToVideos() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const VideoPage()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const VideoPage()),
+    );
+  }
+
+  void navigateToAssessment() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AssessmentPage()),
+    );
   }
 
   @override
@@ -48,13 +62,18 @@ class _ResourcesPageState extends State<ResourcesPage> implements ResourcesContr
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MenuButton(
-                  text: 'Sounds',
-                  onPressed: () => _presenter.onSoundsPressed(),
+                text: 'Sounds',
+                onPressed: () => _presenter.onSoundsPressed(),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               MenuButton(
                 text: 'Videos',
                 onPressed: () => _presenter.onVideosPressed(),
+              ),
+              const SizedBox(height: 10),
+              MenuButton(
+                text: 'Assessment',
+                onPressed: navigateToAssessment,
               ),
             ],
           ),
