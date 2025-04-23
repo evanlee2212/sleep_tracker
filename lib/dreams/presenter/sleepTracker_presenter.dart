@@ -17,4 +17,8 @@ class sleepTrackerPresenter {
   getLog(int index) {
     return model.getLogFromIndex(index);
   }
+
+  Future<void> fetchEntries() {
+    return model.fetchEntries();
+  }
 }

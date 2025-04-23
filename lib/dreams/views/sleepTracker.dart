@@ -6,8 +6,6 @@ import 'dart:async';
 import 'package:sleep_app/dreams/presenter/sleepTracker_presenter.dart';
 import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
 
-import '../presenter/sleep_data_presenter.dart';
-
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
 
@@ -21,6 +19,13 @@ class _SleepTrackerState extends State<SleepTracker> {
   Timer? _timer;
   int _elapsedTime = 0; // In seconds
 
+  @override
+  void initState() {
+    super.initState();
+    presenter.fetchEntries().then((_) {
+      setState(() {});
+    });
+  }
 
   void _startTimer() {
     setState(() {
