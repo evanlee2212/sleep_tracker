@@ -12,6 +12,7 @@ import 'package:sleep_app/dreams/views/settings_page.dart';
 import 'components/menu_button.dart';
 import 'package:sleep_app/components/theme_manager.dart';
 import 'Pages/login_screen.dart';
+import 'dreams/services/welcome_message.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -85,6 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     NotificationHelper.requestPermissionsIfNeeded(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WelcomeService.showOnFirstLaunch(context);
+    });
   }
 
   @override
