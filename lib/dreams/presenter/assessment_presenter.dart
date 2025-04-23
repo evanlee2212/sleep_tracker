@@ -159,7 +159,7 @@ class AssessmentPresenter {
         goals.add(Goal(
           questionId: 'stress',
           suggestion:
-          'Your stress level is high—consider guided meditation or yoga before bed.',
+          'Your stress level is high, consider guided meditation or yoga before bed.',
         ));
       }
 
@@ -172,7 +172,7 @@ class AssessmentPresenter {
         goals.add(Goal(
           questionId: 'restful',
           suggestion:
-          'Sleep quality seems low—try journaling or consult a sleep specialist.',
+          'Sleep quality seems low, try journaling or consult a sleep specialist.',
         ));
       }
 

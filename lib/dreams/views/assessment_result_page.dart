@@ -130,7 +130,7 @@ class AssessmentResultPage extends StatelessWidget {
             ctx,
             MaterialPageRoute(builder: (_) => SleepData()),
           ),
-          child: const Text('Track caffeine consumption & sleep quality here'),
+          child: const Text('Track caffeine consumption & sleep quality using the Sleep Diary'),
         );
 
       case 'alcohol':
@@ -139,7 +139,7 @@ class AssessmentResultPage extends StatelessWidget {
             ctx,
             MaterialPageRoute(builder: (_) => SleepData()),
           ),
-          child: const Text('Track alcohol consumption & sleep quality here'),
+          child: const Text('Track alcohol consumption & sleep quality using the Sleep Diary'),
         );
 
       case 'screen':
