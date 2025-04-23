@@ -4,7 +4,7 @@ import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
 import 'package:sleep_app/dreams/views/video_page.dart';
-import 'package:sleep_app/dreams/views/assessment_page.dart';  // new
+import 'package:sleep_app/dreams/views/assessment_page.dart';
 
 class ResourcesPage extends StatefulWidget {
   const ResourcesPage({super.key});
@@ -58,7 +58,6 @@ class _ResourcesPageState extends State<ResourcesPage>
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MenuButton(

@@ -16,7 +16,7 @@ class AssessmentRepository {
         .collection('users')
         .doc(_uid)
         .collection('assessments')
-        .doc(); // auto ID
+        .doc(); //auto ID
     return doc.set({
       'timestamp': FieldValue.serverTimestamp(),
       'responses': responses

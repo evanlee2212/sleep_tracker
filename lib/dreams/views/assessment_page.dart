@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/assessment_question.dart';
 import '../models/assessment_response.dart';
+import '../models/goal.dart';
 import '../presenter/assessment_presenter.dart';
+import '../repositories/assessment_repository.dart';
 import 'assessment_result_page.dart';
 
 class AssessmentPage extends StatefulWidget {
+  const AssessmentPage({Key? key}) : super(key: key); //const constructor fix
+
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
 }
@@ -34,7 +38,9 @@ class _AssessmentPageState extends State<AssessmentPage>
   void onAssessmentComplete(List<Goal> goals) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => AssessmentResultPage(goals: goals)),
+      MaterialPageRoute(
+        builder: (_) => AssessmentResultPage(goals: goals),
+      ),
     );
   }
 
@@ -64,7 +70,7 @@ class _AssessmentPageState extends State<AssessmentPage>
           onChanged: (v) => _answers[q.id] = int.tryParse(v) ?? 0,
         );
       default:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
     }
   }
 
@@ -79,11 +85,11 @@ class _AssessmentPageState extends State<AssessmentPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sleep Assessment')),
+      appBar: AppBar(title: const Text('Sleep Assessment')),
       body: _questions.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Expanded(
@@ -93,8 +99,8 @@ class _AssessmentPageState extends State<AssessmentPage>
             ),
             ElevatedButton(
               onPressed: _submit,
-              child: Text('See Goals'),
-            )
+              child: const Text('See Goals'),
+            ),
           ],
         ),
       ),
