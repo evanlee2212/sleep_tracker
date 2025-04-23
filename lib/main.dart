@@ -60,7 +60,6 @@ class MyApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return const LoginScreen();
 
-
           } else {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
