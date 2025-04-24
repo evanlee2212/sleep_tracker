@@ -13,6 +13,7 @@ import 'components/menu_button.dart';
 import 'package:sleep_app/components/theme_manager.dart';
 import 'Pages/login_screen.dart';
 import 'dreams/services/welcome_message.dart';
+import 'components/theme.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
     final startupService = StartupService();
 
     return MaterialApp(
-      theme: ThemeData.light(),
+      theme: AppTheme.lightTheme,
       darkTheme: ThemeData.dark(),
       themeMode: themeManager.themeMode,
       title: 'Sleep App',

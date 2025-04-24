@@ -3,28 +3,23 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
+import '../components/theme.dart';
 
 void main() => runApp(SleepSoundApp());
 
-class SleepSoundApp extends StatefulWidget {
+class SleepSoundApp extends StatelessWidget {
   const SleepSoundApp({super.key});
 
   @override
-  _SleepSoundAppState createState() => _SleepSoundAppState();
-}
-
-class _SleepSoundAppState extends State<SleepSoundApp> {
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    body: SoundTabs(),
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+      home: const SoundTabs(),
     );
   }
 }
 
 class SoundTabs extends StatefulWidget {
-
   const SoundTabs({super.key});
 
   @override
@@ -57,16 +52,16 @@ class _SoundTabsState extends State<SoundTabs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          SoundPlayerPage(onFavoritesChanged: _updateFavorites),
-          FavoritesPage(favorites: favorites, onFavoritesChanged: _updateFavorites),
-          CustomSoundPage(),
-        ],
+      appBar: AppTheme.buildAppBar(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
+      body: BackgroundWrapper(
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: [
+            SoundPlayerPage(onFavoritesChanged: _updateFavorites),
+            FavoritesPage(favorites: favorites, onFavoritesChanged: _updateFavorites),
+            CustomSoundPage(),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
