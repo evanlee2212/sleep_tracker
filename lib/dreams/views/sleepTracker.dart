@@ -1,6 +1,10 @@
 //create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
 import 'package:flutter/material.dart';
+import 'package:sleep_app/Pages/sleepDiary.dart';
 import 'dart:async';
+
+import 'package:sleep_app/dreams/presenter/sleepTracker_presenter.dart';
+import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
 
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
@@ -10,11 +14,18 @@ class SleepTracker extends StatefulWidget {
 }
 
 class _SleepTrackerState extends State<SleepTracker> {
+  sleepTrackerPresenter presenter = new sleepTrackerPresenter();
   bool _isPlaying = false;
   Timer? _timer;
   int _elapsedTime = 0; // In seconds
 
-  final List<Map<String, String>> _sleepLogs = [];
+  @override
+  void initState() {
+    super.initState();
+    presenter.fetchEntries().then((_) {
+      setState(() {});
+    });
+  }
 
   void _startTimer() {
     setState(() {
@@ -87,15 +98,10 @@ class _SleepTrackerState extends State<SleepTracker> {
   }
 
   void _logSleepSession(String durationInHours, int sleepQuality) {
-    final now = DateTime.now();
     setState(() {
-      _sleepLogs.add({
-        'time': '${now.hour}:${now.minute.toString().padLeft(2, '0')} - ${now.month}/${now.day}',
-        'duration': '$durationInHours hrs',
-        'quality': '$sleepQuality/10'
-      });
-      _elapsedTime = 0;
+      presenter.addSleepLog(durationInHours, sleepQuality);
     });
+    _elapsedTime = 0;
   }
 
   void _showSleepDuration(String durationInHours, int quality) {
@@ -103,12 +109,28 @@ class _SleepTrackerState extends State<SleepTracker> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sleep Summary'),
-        content: Text('You slept for $durationInHours hours.\nSleep quality: $quality/10'),
+        content: Text('You slept for $durationInHours hours.\n'
+            'Sleep quality: $quality/10\n'
+            'Add to Sleep Dairy?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Not now'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SleepDiaryPage(
+                    diaryModel: SleepDiaryModel(),
+                  ),
+                ),
+              );
+            },
+            child: const Text('OK'),
+          )
         ],
       ),
     );
@@ -149,9 +171,9 @@ class _SleepTrackerState extends State<SleepTracker> {
           const Text('Sleep Log:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           Expanded(
             child: ListView.builder(
-              itemCount: _sleepLogs.length,
+              itemCount: presenter.getSleepLogsLength(),
               itemBuilder: (context, index) {
-                final log = _sleepLogs[index];
+                final log = presenter.getLog(index);
                 return ListTile(
                   leading: const Icon(Icons.bedtime),
                   title: Text('Duration: ${log['duration']}'),

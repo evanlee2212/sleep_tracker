@@ -1,4 +1,4 @@
-import '../models/video_resource.dart';
+import '../models/video.dart';
 import '../repositories/video_repository.dart';
 
 abstract class VideoView {
