@@ -2,14 +2,14 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 class NotificationScheduler {
+  //wind down reminder
   Future<void> scheduleSleepNotification(TimeOfDay time) async {
-    print('NotificationScheduler: scheduleSleepNotification() called');
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 1,
         channelKey: 'scheduled_channel',
         title: 'Wind Down Time!',
-        body: 'It\'s time to start winding down for bed.',
+        body: 'It\'s time to start winding down for bed. Limit screen time and avoid heavy food, caffeine and alcohol for high quality sleep!',
         notificationLayout: NotificationLayout.Default,
       ),
       schedule: NotificationCalendar(
@@ -20,17 +20,22 @@ class NotificationScheduler {
         repeats: true,
       ),
     );
-    print('NotificationScheduler: scheduleSleepNotification() completed');
   }
 
-  Future<void> scheduleWakeUpNotification(TimeOfDay time) async {
-    print('NotificationScheduler: scheduleWakeUpNotification() called');
+  //wake up text or possible goal additions
+  Future<void> scheduleWakeUpNotification(
+      TimeOfDay time, {
+        String? customBody,
+      }) async {
+    //cancel the previous wake notification (ID = 2)
+    await AwesomeNotifications().cancel(2);
+
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 2,
         channelKey: 'scheduled_channel',
         title: 'Good Morning!',
-        body: 'It\'s time to wake up!',
+        body: customBody ?? 'It\'s time to wake up!',
         notificationLayout: NotificationLayout.Default,
       ),
       schedule: NotificationCalendar(
@@ -41,12 +46,8 @@ class NotificationScheduler {
         repeats: true,
       ),
     );
-    print('NotificationScheduler: scheduleWakeUpNotification() completed');
   }
 
-  Future<void> cancelAllNotifications() async {
-    print('NotificationScheduler: cancelAllNotifications() called');
-    await AwesomeNotifications().cancelAll();
-    print('NotificationScheduler: cancelAllNotifications() completed');
-  }
+  Future<void> cancelAllNotifications() =>
+      AwesomeNotifications().cancelAll();
 }
