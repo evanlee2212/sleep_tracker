@@ -5,9 +5,11 @@ import '../models/goal.dart';
 import '../presenter/assessment_presenter.dart';
 import '../repositories/assessment_repository.dart';
 import 'assessment_result_page.dart';
+import 'past_assessments_page.dart';
+
 
 class AssessmentPage extends StatefulWidget {
-  const AssessmentPage({Key? key}) : super(key: key); //const constructor fix
+  const AssessmentPage({Key? key}) : super(key: key);
 
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
@@ -46,7 +48,9 @@ class _AssessmentPageState extends State<AssessmentPage>
 
   @override
   void onError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   Widget _buildQuestionField(AssessmentQuestion q) {
@@ -54,7 +58,11 @@ class _AssessmentPageState extends State<AssessmentPage>
       case QuestionType.time:
         return ListTile(
           title: Text(q.prompt),
-          subtitle: Text(_answers[q.id]?.format(context) ?? 'Select time'),
+          subtitle: Text(
+            _answers[q.id] != null
+                ? (_answers[q.id] as TimeOfDay).format(context)
+                : 'Select time',
+          ),
           onTap: () async {
             final t = await showTimePicker(
               context: context,
@@ -64,10 +72,13 @@ class _AssessmentPageState extends State<AssessmentPage>
           },
         );
       case QuestionType.integer:
-        return TextFormField(
-          decoration: InputDecoration(labelText: q.prompt),
-          keyboardType: TextInputType.number,
-          onChanged: (v) => _answers[q.id] = int.tryParse(v) ?? 0,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextFormField(
+            decoration: InputDecoration(labelText: q.prompt),
+            keyboardType: TextInputType.number,
+            onChanged: (v) => _answers[q.id] = int.tryParse(v) ?? 0,
+          ),
         );
       default:
         return const SizedBox.shrink();
@@ -85,7 +96,10 @@ class _AssessmentPageState extends State<AssessmentPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sleep Assessment')),
+      appBar: AppBar(
+        title: const Text('Sleep Assessment'),
+        backgroundColor: Colors.deepPurpleAccent,
+      ),
       body: _questions.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -100,6 +114,16 @@ class _AssessmentPageState extends State<AssessmentPage>
             ElevatedButton(
               onPressed: _submit,
               child: const Text('See Goals'),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const PastAssessmentsPage(),
+                ),
+              ),
+              child: const Text('View Previous Assessments'),
             ),
           ],
         ),

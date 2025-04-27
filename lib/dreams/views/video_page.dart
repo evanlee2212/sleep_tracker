@@ -17,11 +17,9 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage>
     implements VideoView, PlaylistView {
-  // video MVP
   late final VideoPresenter _videoPresenter;
   List<VideoResource> _videos = [];
 
-  // playlist MVP
   late final PlaylistPresenter _playlistPresenter;
   List<Playlist> _playlists = [];
 
@@ -36,13 +34,13 @@ class _VideoPageState extends State<VideoPage>
         PlaylistPresenter(view: this, repo: PlaylistRepository());
   }
 
-  // VideoView
+  //VideoView
   @override
   void onVideosLoaded(List<VideoResource> videos) {
     setState(() => _videos = videos);
   }
 
-  // PlaylistView
+  //PlaylistView
   @override
   void onPlaylistsUpdated(List<Playlist> playlists) {
     setState(() => _playlists = playlists);
@@ -105,7 +103,7 @@ class _VideoPageState extends State<VideoPage>
       ),
       body: Column(
         children: [
-          // ── Playlist carousel ──
+          //playlist display
           SizedBox(
             height: 80,
             child: ListView.builder(
@@ -140,7 +138,7 @@ class _VideoPageState extends State<VideoPage>
           ),
           const Divider(),
 
-          // ── Video list ──
+          //video list
           Expanded(
             child: ListView.builder(
               itemCount: _videos.length,
