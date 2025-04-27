@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:provider/provider.dart';
+import 'package:sleep_app/components/theme_manager.dart';
+import 'package:sleep_app/dreams/views/settings_page.dart';
 import 'dreams/views/sleep_data.dart';
 import 'dreams/views/notifications_page.dart';
 import 'dreams/views/resources_page.dart';
 import 'dreams/services/app_initializer.dart';
 import 'dreams/services/startup_service.dart';
 import 'dreams/services/notification_permissions.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:provider/provider.dart';
-import 'package:sleep_app/dreams/views/settings_page.dart';
+import 'dreams/services/welcome_message.dart';
 import 'components/menu_button.dart';
-import 'package:sleep_app/components/theme_manager.dart';
 import 'Pages/login_screen.dart';
 
 
@@ -59,7 +60,6 @@ class MyApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return const LoginScreen();
 
-
           } else {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
@@ -85,6 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     NotificationHelper.requestPermissionsIfNeeded(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WelcomeService.showOnFirstLaunch(context);
+    });
   }
 
   @override

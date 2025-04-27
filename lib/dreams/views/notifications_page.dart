@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../repositories/settings_repository.dart';
 import '../services/notification_scheduler.dart';
+import '../repositories/notification_repository.dart';
+import 'dart:async';
+
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -12,57 +15,73 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   late TimeOfDay _goodMorningTime;
   late TimeOfDay _windDownTime;
-  final SettingsRepository _repository = SettingsRepository();
+  final SettingsRepository _prefsRepo = SettingsRepository();
   final NotificationScheduler _scheduler = NotificationScheduler();
+  final NotificationsRepository _firestoreRepo = NotificationsRepository();
   bool _isLoading = true;
+  late final StreamSubscription<Map<String, TimeOfDay>> _settingsSub;
 
   @override
   void initState() {
     super.initState();
     _initialize();
-  }
-
-  Future<void> _initialize() async {
-    await _repository.loadSettings();
-    final settings = _repository.settings;
-    _goodMorningTime = settings.goodMorningTimeOfDay;
-    _windDownTime = settings.windDownTimeOfDay;
-    setState(() {
-      _isLoading = false;
+    _settingsSub = _firestoreRepo.watchSettings().listen((prefs) {
+      if (prefs.containsKey('goodMorning') && prefs.containsKey('windDown')) {
+        setState(() {
+          _goodMorningTime = prefs['goodMorning']!;
+          _windDownTime   = prefs['windDown']!;
+        });
+        _rescheduleAll();
+      }
     });
   }
 
+  @override
+  void dispose() {
+    _settingsSub.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initialize() async {
+    await _prefsRepo.loadSettings();
+    final settings = _prefsRepo.settings;
+    _goodMorningTime = settings.goodMorningTimeOfDay;
+    _windDownTime   = settings.windDownTimeOfDay;
+    setState(() { _isLoading = false; });
+  }
+
   Future<void> _selectTime(BuildContext context, bool isGoodMorning) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+    final picked = await showTimePicker(
       context: context,
       initialTime: isGoodMorning ? _goodMorningTime : _windDownTime,
     );
-    if (pickedTime != null) {
+    if (picked != null) {
       setState(() {
-        if (isGoodMorning) {
-          _goodMorningTime = pickedTime;
-        } else {
-          _windDownTime = pickedTime;
-        }
+        if (isGoodMorning) _goodMorningTime = picked;
+        else              _windDownTime   = picked;
       });
       await _saveSettings();
     }
   }
 
   Future<void> _saveSettings() async {
-    await _repository.saveNotificationTimes(_goodMorningTime, _windDownTime);
-    await _repository.loadSettings();
-    final settings = _repository.settings;
-
-    await _scheduler.cancelAllNotifications();
-    await _scheduler.scheduleSleepNotification(settings.windDownTimeOfDay);
-    await _scheduler.scheduleWakeUpNotification(settings.goodMorningTimeOfDay);
-
+    //persist locally
+    await _prefsRepo.saveNotificationTimes(_goodMorningTime, _windDownTime);
+    //persist to Firestore
+    await _firestoreRepo.saveSettings(_goodMorningTime, _windDownTime);
+    //reschedule notifications
+    await _rescheduleAll();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Notification settings saved')),
       );
     }
+  }
+
+  Future<void> _rescheduleAll() async {
+    await _scheduler.cancelAllNotifications();
+    await _scheduler.scheduleSleepNotification(_windDownTime);
+    await _scheduler.scheduleWakeUpNotification(_goodMorningTime);
   }
 
   @override
@@ -75,7 +94,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
