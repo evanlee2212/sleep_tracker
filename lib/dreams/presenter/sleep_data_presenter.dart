@@ -27,5 +27,10 @@ class SleepDataPresenter implements SleepDataContractPresenter {
     _view.navigateToSleepStatistics();
   }
 
+  @override
+  void onScreenTimePressed() {
+    _view.navigateToScreenTime();
+  }
+
   SleepDiaryModel get diaryModel => _diaryModel;
 }

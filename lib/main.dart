@@ -16,7 +16,7 @@ import 'package:sleep_app/dreams/services/startup_service.dart';
 import 'package:sleep_app/dreams/services/notification_permissions.dart';
 import 'package:sleep_app/dreams/services/welcome_message.dart';
 
-import 'Pages/login_screen.dart';
+import 'dreams/views/login_screen.dart';
 import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

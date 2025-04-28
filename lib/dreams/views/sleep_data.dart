@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_app/Pages/sleepDiary.dart';
-import 'package:sleep_app/Pages/sleep_cycles.dart';
+import 'package:sleep_app/dreams/views/sleepDiary.dart';
+import 'package:sleep_app/dreams/views/sleep_cycles_page.dart';
 import 'package:sleep_app/dreams/views/statistics.dart';
-import 'package:sleep_app/Pages/screen_time.dart';
+import 'package:sleep_app/dreams/views/screen_time_view.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/dreams/views/sleepTracker.dart';
 import 'package:sleep_app/dreams/contracts/sleep_data_contract.dart';
@@ -41,6 +41,14 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SleepTracker()),
+    );
+  }
+
+  @override
+  void navigateToScreenTime() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ScreenTimePage()),
     );
   }
 

@@ -1,6 +1,6 @@
 //create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
 import 'package:flutter/material.dart';
-import 'package:sleep_app/Pages/sleepDiary.dart';
+import 'package:sleep_app/dreams/views/sleepDiary.dart';
 import 'dart:async';
 
 import 'package:sleep_app/dreams/presenter/sleepTracker_presenter.dart';

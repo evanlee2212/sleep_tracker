@@ -3,7 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
-import '../components/theme.dart';
+import '../../components/theme.dart';
 
 void main() => runApp(const SleepSoundApp());
 

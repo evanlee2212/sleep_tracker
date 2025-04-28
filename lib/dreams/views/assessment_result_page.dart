@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../Pages/screen_time.dart';
+import 'package:sleep_app/dreams/views/screen_time_view.dart';
 import '../models/goal.dart';
 import '../repositories/settings_repository.dart';
 import '../services/notification_scheduler.dart';
