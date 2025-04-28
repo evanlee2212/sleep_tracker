@@ -5,6 +5,7 @@ import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
 import 'package:sleep_app/dreams/views/video_page.dart';
 import 'package:sleep_app/dreams/views/assessment_page.dart';
+import '../../components/theme.dart';
 
 class ResourcesPage extends StatefulWidget {
   const ResourcesPage({super.key});
@@ -49,32 +50,38 @@ class _ResourcesPageState extends State<ResourcesPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resources'),
-        backgroundColor: Colors.deepPurpleAccent,
-        toolbarHeight: 100,
-      ),
-      body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MenuButton(
-                text: 'Sounds',
-                onPressed: () => _presenter.onSoundsPressed(),
+      appBar: AppTheme.buildAppBar('Resources'),
+      body: BackgroundWrapper(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              color: Colors.white.withOpacity(0.9),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 6,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MenuButton(
+                      text: 'Sounds',
+                      onPressed: () => _presenter.onSoundsPressed(),
+                    ),
+                    const SizedBox(height: 16),
+                    MenuButton(
+                      text: 'Videos',
+                      onPressed: () => _presenter.onVideosPressed(),
+                    ),
+                    const SizedBox(height: 16),
+                    MenuButton(
+                      text: 'Assessment',
+                      onPressed: navigateToAssessment,
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Videos',
-                onPressed: () => _presenter.onVideosPressed(),
-              ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Assessment',
-                onPressed: navigateToAssessment,
-              ),
-            ],
+            ),
           ),
         ),
       ),

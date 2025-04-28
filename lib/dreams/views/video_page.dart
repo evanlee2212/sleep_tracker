@@ -7,6 +7,7 @@ import '../models/playlist.dart';
 import '../repositories/playlist_repository.dart';
 import '../presenter/playlist_presenter.dart';
 import 'playlist_detail_page.dart';
+import '../../components/theme.dart';
 
 class VideoPage extends StatefulWidget {
   const VideoPage({Key? key}) : super(key: key);
@@ -97,83 +98,96 @@ class _VideoPageState extends State<VideoPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Relaxation Videos'),
-        backgroundColor: Colors.deepPurpleAccent,
-      ),
-      body: Column(
-        children: [
-          //playlist display
-          SizedBox(
-            height: 80,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              itemCount: _playlists.length + 1,
-              itemBuilder: (ctx, i) {
-                if (i == _playlists.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ActionChip(
-                      label: const Icon(Icons.add),
-                      onPressed: _showCreatePlaylistDialog,
-                    ),
-                  );
-                }
-                final pl = _playlists[i];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ActionChip(
-                    label: Text(pl.name),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PlaylistDetailPage(playlist: pl),
+      appBar: AppTheme.buildAppBar('Relaxation Videos'),
+      body: BackgroundWrapper(
+        child: Column(
+          children: [
+            // Playlist display
+            Card(
+              color: Colors.white.withOpacity(0.9),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.all(16),
+              elevation: 4,
+              child: SizedBox(
+                height: 80,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  itemCount: _playlists.length + 1,
+                  itemBuilder: (ctx, i) {
+                    if (i == _playlists.length) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ActionChip(
+                          label: const Icon(Icons.add),
+                          onPressed: _showCreatePlaylistDialog,
+                        ),
+                      );
+                    }
+                    final pl = _playlists[i];
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ActionChip(
+                        label: Text(pl.name),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PlaylistDetailPage(playlist: pl),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            const Divider(),
+
+            // Video list
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: _videos.length,
+                itemBuilder: (ctx, idx) {
+                  final video = _videos[idx];
+                  return Card(
+                    color: Colors.white.withOpacity(0.9),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      title: Text(video.title),
+                      subtitle: Text(video.category),
+                      trailing: PopupMenuButton<String>(
+                        icon: const Icon(Icons.more_vert),
+                        itemBuilder: (_) => const [
+                          PopupMenuItem(value: 'play', child: Text('Play')),
+                          PopupMenuItem(value: 'add', child: Text('Add to playlist')),
+                        ],
+                        onSelected: (choice) {
+                          if (choice == 'play') {
+                            final id = YoutubePlayer.convertUrlToId(video.videoUrl);
+                            if (id != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => YoutubePlayerScreen(videoId: id),
+                                ),
+                              );
+                            }
+                          } else {
+                            _showAddToPlaylistSheet(video.videoUrl);
+                          }
+                        },
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          const Divider(),
-
-          //video list
-          Expanded(
-            child: ListView.builder(
-              itemCount: _videos.length,
-              itemBuilder: (ctx, idx) {
-                final video = _videos[idx];
-                return ListTile(
-                  title: Text(video.title),
-                  subtitle: Text(video.category),
-                  trailing: PopupMenuButton<String>(
-                    icon: const Icon(Icons.more_vert),
-                    itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'play', child: Text('Play')),
-                      PopupMenuItem(value: 'add', child: Text('Add to playlist')),
-                    ],
-                    onSelected: (choice) {
-                      if (choice == 'play') {
-                        final id = YoutubePlayer.convertUrlToId(video.videoUrl);
-                        if (id != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => YoutubePlayerScreen(videoId: id),
-                            ),
-                          );
-                        }
-                      } else {
-                        _showAddToPlaylistSheet(video.videoUrl);
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -181,8 +195,8 @@ class _VideoPageState extends State<VideoPage>
 
 class YoutubePlayerScreen extends StatefulWidget {
   final String videoId;
-  const YoutubePlayerScreen({Key? key, required this.videoId})
-      : super(key: key);
+  const YoutubePlayerScreen({Key? key, required this.videoId}) : super(key: key);
+
   @override
   _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();
 }
@@ -210,13 +224,9 @@ class _YoutubePlayerScreenState extends State<YoutubePlayerScreen> {
     return YoutubePlayerBuilder(
       player: YoutubePlayer(controller: _controller),
       builder: (ctx, player) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Now Playing'),
-          backgroundColor: Colors.deepPurpleAccent,
-        ),
+        appBar: AppTheme.buildAppBar('Now Playing'),
         body: Center(child: player),
       ),
     );
   }
 }
-

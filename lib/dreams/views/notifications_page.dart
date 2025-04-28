@@ -3,7 +3,7 @@ import '../repositories/settings_repository.dart';
 import '../services/notification_scheduler.dart';
 import '../repositories/notification_repository.dart';
 import 'dart:async';
-
+import '../../components/theme.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -29,7 +29,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       if (prefs.containsKey('goodMorning') && prefs.containsKey('windDown')) {
         setState(() {
           _goodMorningTime = prefs['goodMorning']!;
-          _windDownTime   = prefs['windDown']!;
+          _windDownTime = prefs['windDown']!;
         });
         _rescheduleAll();
       }
@@ -46,8 +46,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
     await _prefsRepo.loadSettings();
     final settings = _prefsRepo.settings;
     _goodMorningTime = settings.goodMorningTimeOfDay;
-    _windDownTime   = settings.windDownTimeOfDay;
-    setState(() { _isLoading = false; });
+    _windDownTime = settings.windDownTimeOfDay;
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> _selectTime(BuildContext context, bool isGoodMorning) async {
@@ -58,18 +60,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
     if (picked != null) {
       setState(() {
         if (isGoodMorning) _goodMorningTime = picked;
-        else              _windDownTime   = picked;
+        else _windDownTime = picked;
       });
       await _saveSettings();
     }
   }
 
   Future<void> _saveSettings() async {
-    //persist locally
     await _prefsRepo.saveNotificationTimes(_goodMorningTime, _windDownTime);
-    //persist to Firestore
     await _firestoreRepo.saveSettings(_goodMorningTime, _windDownTime);
-    //reschedule notifications
     await _rescheduleAll();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,36 +86,52 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications Settings'),
-        backgroundColor: Colors.deepPurpleAccent,
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Notification Settings',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      appBar: AppTheme.buildAppBar('Notifications Settings'),
+      body: BackgroundWrapper(
+  child: _isLoading
+      ? const Center(child: CircularProgressIndicator())
+      : Center( 
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 600, 
+              ),
+              child: Card(
+                color: Theme.of(context).cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                elevation: 6,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Notification Settings',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 24),
+                      ListTile(
+                        title: const Text('Good Morning Notification Time'),
+                        subtitle: Text(_goodMorningTime.format(context)),
+                        onTap: () => _selectTime(context, true),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                      const SizedBox(height: 12),
+                      ListTile(
+                        title: const Text('Wind Down Notification Time'),
+                        subtitle: Text(_windDownTime.format(context)),
+                        onTap: () => _selectTime(context, false),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
-            ListTile(
-              title: const Text('Good Morning Notification Time'),
-              subtitle: Text(_goodMorningTime.format(context)),
-              onTap: () => _selectTime(context, true),
-            ),
-            ListTile(
-              title: const Text('Wind Down Notification Time'),
-              subtitle: Text(_windDownTime.format(context)),
-              onTap: () => _selectTime(context, false),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-

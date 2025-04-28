@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:sleep_app/components/theme_manager.dart';
-import 'package:sleep_app/dreams/views/settings_page.dart';
-import 'dreams/views/sleep_data.dart';
-import 'dreams/views/notifications_page.dart';
-import 'dreams/views/resources_page.dart';
-import 'dreams/services/app_initializer.dart';
-import 'dreams/services/startup_service.dart';
-import 'dreams/services/notification_permissions.dart';
-import 'dreams/services/welcome_message.dart';
-import 'components/menu_button.dart';
-import 'Pages/login_screen.dart';
-import 'dreams/services/welcome_message.dart';
-import 'components/theme.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'package:sleep_app/components/theme.dart';
+import 'package:sleep_app/components/theme_manager.dart';
+import 'package:sleep_app/components/menu_button.dart';
+
+import 'package:sleep_app/dreams/views/settings_page.dart';
+import 'package:sleep_app/dreams/views/sleep_data.dart';
+import 'package:sleep_app/dreams/views/resources_page.dart';
+import 'package:sleep_app/dreams/views/notifications_page.dart';
+
+import 'package:sleep_app/dreams/services/app_initializer.dart';
+import 'package:sleep_app/dreams/services/startup_service.dart';
+import 'package:sleep_app/dreams/services/notification_permissions.dart';
+import 'package:sleep_app/dreams/services/welcome_message.dart';
+
+import 'Pages/login_screen.dart';
+import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -50,18 +52,17 @@ class MyApp extends StatelessWidget {
     final startupService = StartupService();
 
     return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: ThemeData.dark(),
-      themeMode: themeManager.themeMode,
       title: 'Sleep App',
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
+      theme: AppTheme.lightTheme,
+      darkTheme: ThemeData.dark(),
+      themeMode: themeManager.themeMode,
       home: FutureBuilder(
         future: startupService.initialize(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return const LoginScreen();
-
           } else {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
@@ -82,7 +83,10 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -91,52 +95,72 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       WelcomeService.showOnFirstLaunch(context);
     });
+
+    _fadeController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeIn,
+    );
+
+    _fadeController.forward();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage())),
-          )
-        ],
-        title: const Text('Sweet Dreams'),
-        backgroundColor: Colors.deepPurpleAccent,
-        toolbarHeight: 100,
-      ),
+
+@override
+Widget build(BuildContext context) {
+  return BackgroundWrapper(
+    child: Scaffold(
+      extendBodyBehindAppBar: true, 
+      backgroundColor: Colors.transparent,
+      appBar: AppTheme.buildAppBar('', actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage()));
+          },
+        )
+      ]),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Transform.translate(
-                offset: const Offset(0, -150),
-                child:CircleAvatar(
-                  radius: 104,
-                  backgroundColor: Colors.indigo,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo.png'),
-                    radius: 100,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Transform.translate(
+                    offset: const Offset(0, -55),
+                    child: CircleAvatar(
+                      radius: 104,
+                      backgroundColor: Colors.indigo,
+                      child: const CircleAvatar(
+                        backgroundImage: AssetImage('assets/images/logo.png'),
+                        radius: 100,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              MenuButton(
-                text: 'Sleep Data',
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SleepData())),
-              ),
-              SizedBox(height: 20),
-              MenuButton(
-                text: 'Resources',
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ResourcesPage())),
-              ),
-              SizedBox(height: 10),
-            ],
+                const SizedBox(height: 30),
+                MenuButton(
+                  text: 'Sleep Data',
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SleepData())),
+                ),
+                const SizedBox(height: 20),
+                MenuButton(
+                  text: 'Resources',
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ResourcesPage())),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

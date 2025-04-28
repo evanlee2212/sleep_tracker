@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:math';
 import '../components/theme.dart';
 
-void main() => runApp(SleepSoundApp());
+void main() => runApp(const SleepSoundApp());
 
 class SleepSoundApp extends StatelessWidget {
   const SleepSoundApp({super.key});
@@ -59,7 +59,7 @@ class _SoundTabsState extends State<SoundTabs> {
           children: [
             SoundPlayerPage(onFavoritesChanged: _updateFavorites),
             FavoritesPage(favorites: favorites, onFavoritesChanged: _updateFavorites),
-            CustomSoundPage(),
+            const CustomSoundPage(),
           ],
         ),
       ),
@@ -84,8 +84,8 @@ class EqualizerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blueAccent.withOpacity(0.4)
-      ..strokeWidth = 4;
+      ..color = Colors.blueAccent.withOpacity(0.2)
+      ..strokeWidth = 3;
 
     for (int i = 0; i < bars.length; i++) {
       double x = i * (size.width / bars.length);
@@ -125,7 +125,7 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
   void initState() {
     super.initState();
     loadFavorites();
-    equalizerController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    equalizerController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     equalizerController.addListener(() {
       if (isPlaying) updateEqualizer();
     });
@@ -188,9 +188,9 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
   void startTimer(Duration duration) {
     countdown?.cancel();
     timeLeft = duration;
-    countdown = Timer.periodic(Duration(seconds: 1), (timer) {
+    countdown = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timeLeft > Duration.zero) {
-        setState(() => timeLeft -= Duration(seconds: 1));
+        setState(() => timeLeft -= const Duration(seconds: 1));
       } else {
         timer.cancel();
         player.stop();
@@ -226,32 +226,39 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
         Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: TextField(
                 controller: searchController,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: 'Search sounds...',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                 ),
               ),
             ),
             Expanded(
               child: ListView(
+                padding: const EdgeInsets.all(8),
                 children: filteredSounds.map((sound) {
                   final isFav = favorites.contains(sound);
                   final isCurrent = currentSound == sound;
-                  return ListTile(
-                    title: Text(sound.split('/').last.replaceAll('.mp3', '')),
-                    leading: IconButton(
-                      icon: Icon(isFav ? Icons.favorite : Icons.favorite_border,
-                          color: isFav ? Colors.red : null),
-                      onPressed: () => toggleFavorite(sound),
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    child: ListTile(
+                      title: Text(sound.split('/').last.replaceAll('.mp3', '')),
+                      leading: IconButton(
+                        icon: Icon(isFav ? Icons.favorite : Icons.favorite_border,
+                            color: isFav ? Colors.red : null),
+                        onPressed: () => toggleFavorite(sound),
+                      ),
+                      trailing: isCurrent && isPlaying
+                          ? IconButton(icon: const Icon(Icons.pause), onPressed: pauseSound)
+                          : IconButton(icon: const Icon(Icons.play_arrow), onPressed: () => playSound(sound)),
                     ),
-                    trailing: isCurrent && isPlaying
-                        ? IconButton(icon: Icon(Icons.pause), onPressed: pauseSound)
-                        : IconButton(icon: Icon(Icons.play_arrow), onPressed: () => playSound(sound)),
                   );
                 }).toList(),
               ),
@@ -262,14 +269,16 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
                 children: [
                   ElevatedButton(
                       onPressed: () => _showTimerDialog(),
-                      child: Text('Set Timer')),
-                  SizedBox(width: 10),
+                      style: AppTheme.elevatedButtonStyle,
+                      child: const Text('Set Timer')),
+                  const SizedBox(width: 10),
                   ElevatedButton(
                       onPressed: resetTimer,
-                      child: Text('Reset Timer')),
-                  Spacer(),
+                      style: AppTheme.elevatedButtonStyle,
+                      child: const Text('Reset Timer')),
+                  const Spacer(),
                   Text('${timeLeft.inMinutes.toString().padLeft(2, '0')}:${(timeLeft.inSeconds % 60).toString().padLeft(2, '0')}'),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   SizedBox(
                     height: 30,
                     width: 30,
@@ -294,7 +303,7 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
       builder: (context) {
         int selectedMinutes = 15;
         return AlertDialog(
-          title: Text('Set Timer Duration'),
+          title: const Text('Set Timer Duration'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -306,14 +315,15 @@ class _SoundPlayerPageState extends State<SoundPlayerPage> with TickerProviderSt
               TextField(
                 controller: customTimeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Or enter custom time (minutes)'),
+                decoration: const InputDecoration(labelText: 'Or enter custom time (minutes)'),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
             ElevatedButton(
-              child: Text('Start Timer'),
+              style: AppTheme.elevatedButtonStyle,
+              child: const Text('Start Timer'),
               onPressed: () {
                 int custom = int.tryParse(customTimeController.text) ?? selectedMinutes;
                 setState(() {
@@ -340,19 +350,20 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (favorites.isEmpty) {
-      return Scaffold(
-        body: Center(
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
           child: Text("Nothing here yet! Click the heart next to sounds to show them here.",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),)
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16)),
         ),
       );
     } else {
       return ListView(
-        children: favorites.map((sound) =>
-            ListTile(title: Text(sound
-                .split('/')
-                .last))).toList(),
+        padding: const EdgeInsets.all(12),
+        children: favorites.map((sound) => Card(
+          child: ListTile(title: Text(sound.split('/').last)),
+        )).toList(),
       );
     }
   }
@@ -363,7 +374,14 @@ class CustomSoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Upload and manage custom sounds'));
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Text('Upload and manage custom sounds',
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
 }
-

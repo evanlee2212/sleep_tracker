@@ -8,6 +8,7 @@ import 'package:sleep_app/dreams/views/sleepTracker.dart';
 import 'package:sleep_app/dreams/contracts/sleep_data_contract.dart';
 import 'package:sleep_app/dreams/presenter/sleep_data_presenter.dart';
 import '../viewmodel/sleepDiaryModel.dart';
+import '../../components/theme.dart'; 
 
 class SleepData extends StatefulWidget {
   const SleepData({super.key});
@@ -62,48 +63,54 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sleep Data'),
-        backgroundColor: Colors.deepPurpleAccent,
-        toolbarHeight: 100,
-      ),
-      body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MenuButton(
-                text: 'Sleep Diary',
-                onPressed: () => _presenter.onSleepDiaryPressed(),
+      appBar: AppTheme.buildAppBar('Sleep Data'),
+      body: BackgroundWrapper(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              color: Theme.of(context).cardColor,
+              elevation: 6,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MenuButton(
+                      text: 'Sleep Diary',
+                      onPressed: () => _presenter.onSleepDiaryPressed(),
+                    ),
+                    const SizedBox(height: 12),
+                    MenuButton(
+                      text: 'Sleep Tracker',
+                      onPressed: () => _presenter.onSleepTrackerPressed(),
+                    ),
+                    const SizedBox(height: 12),
+                    MenuButton(
+                      text: 'Sleep Cycles',
+                      onPressed: () => _presenter.onSleepCyclesPressed(),
+                    ),
+                    const SizedBox(height: 12),
+                    MenuButton(
+                      text: 'Sleep Statistics',
+                      onPressed: () => _presenter.onSleepStatisticsPressed(),
+                    ),
+                    const SizedBox(height: 12),
+                    MenuButton(
+                      text: 'Screen Time',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ScreenTimePage()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Sleep Tracker',
-                onPressed: () => _presenter.onSleepTrackerPressed(),
-              ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Sleep Cycles',
-                onPressed: () => _presenter.onSleepCyclesPressed(),
-              ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Sleep Statistics',
-                onPressed: () => _presenter.onSleepStatisticsPressed(),
-              ),
-              const SizedBox(height: 10),
-              MenuButton(
-                text: 'Screen Time',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ScreenTimePage()),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),

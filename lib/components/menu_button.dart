@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class MenuButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final Color? backgroundColor;
   final double width;
   final double height;
 
@@ -11,36 +10,47 @@ class MenuButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.backgroundColor,
-    this.width = 250,
+    this.width = 320,
     this.height = 60,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
       width: width,
       height: height,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Colors.deepPurpleAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: isDarkMode ? Colors.grey[850] : Colors.white, 
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDarkMode ? 0.3 : 0.1), 
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
-          elevation: 5,
-          shadowColor: Colors.deepPurple.withValues(alpha: 0.3),
-          padding: const EdgeInsets.all(16),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onPressed,
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: isDarkMode ? Colors.white : Colors.black87, 
+              ),
+            ),
+          ),
         ),
-        onPressed: onPressed,
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 25,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            )
-          ),
-      )
+      ),
     );
   }
 }

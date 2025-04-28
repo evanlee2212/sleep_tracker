@@ -6,18 +6,17 @@ import '../repositories/playlist_repository.dart';
 import '../repositories/video_repository.dart';
 import '../presenter/playlist_presenter.dart';
 import 'video_page.dart'; // for YoutubePlayerScreen
+import '../../components/theme.dart'; 
 
 class PlaylistDetailPage extends StatefulWidget {
   final Playlist playlist;
-  const PlaylistDetailPage({Key? key, required this.playlist})
-      : super(key: key);
+  const PlaylistDetailPage({Key? key, required this.playlist}) : super(key: key);
 
   @override
   _PlaylistDetailPageState createState() => _PlaylistDetailPageState();
 }
 
-class _PlaylistDetailPageState extends State<PlaylistDetailPage>
-    implements PlaylistView {
+class _PlaylistDetailPageState extends State<PlaylistDetailPage> implements PlaylistView {
   late final PlaylistPresenter _presenter;
   final _videoRepo = VideoRepository();
   late final List<VideoResource> _allVideos;
@@ -27,17 +26,14 @@ class _PlaylistDetailPageState extends State<PlaylistDetailPage>
   void initState() {
     super.initState();
     _playlist = widget.playlist;
-
     _allVideos = _videoRepo.fetchVideos();
-
-    //listening for playlist changes
     _presenter = PlaylistPresenter(view: this, repo: PlaylistRepository());
   }
 
   @override
   void onPlaylistsUpdated(List<Playlist> playlists) {
     final updated = playlists.firstWhere(
-          (pl) => pl.id == _playlist.id,
+      (pl) => pl.id == _playlist.id,
       orElse: () => _playlist,
     );
     setState(() => _playlist = updated);
@@ -60,34 +56,47 @@ class _PlaylistDetailPageState extends State<PlaylistDetailPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_playlist.name),
-        backgroundColor: Colors.deepPurpleAccent,
-      ),
-      body: ListView.builder(
-        itemCount: _playlist.videoUrls.length,
-        itemBuilder: (ctx, i) {
-          final url = _playlist.videoUrls[i];
+      appBar: AppTheme.buildAppBar(_playlist.name),
+      body: BackgroundWrapper(
+        child: _playlist.videoUrls.isEmpty
+            ? const Center(
+                child: Text(
+                  'No videos in this playlist yet.',
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _playlist.videoUrls.length,
+                itemBuilder: (ctx, i) {
+                  final url = _playlist.videoUrls[i];
 
-          //look up the matching VideoResource by URL
-          final video = _allVideos.firstWhere(
-                (v) => v.videoUrl == url,
-            orElse: () => VideoResource(
-              title: 'Unknown Title',
-              category: '',
-              videoUrl: url,
-            ),
-          );
+                  final video = _allVideos.firstWhere(
+                    (v) => v.videoUrl == url,
+                    orElse: () => VideoResource(
+                      title: 'Unknown Title',
+                      category: '',
+                      videoUrl: url,
+                    ),
+                  );
 
-          return ListTile(
-            title: Text(video.title),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _remove(url),
-            ),
-            onTap: () => _play(url),
-          );
-        },
+                  return Card(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    elevation: 3,
+                    color: Theme.of(context).cardColor,
+                    child: ListTile(
+                      title: Text(video.title),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _remove(url),
+                      ),
+                      onTap: () => _play(url),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
