@@ -1,7 +1,7 @@
 // Varsha
 
 import 'package:flutter/material.dart';
-import '../dreams/viewmodel/sleepDiaryModel.dart';
+import '../viewmodel/sleepDiaryModel.dart';
 
 class SleepDiaryPage extends StatefulWidget {
   final SleepDiaryModel diaryModel;

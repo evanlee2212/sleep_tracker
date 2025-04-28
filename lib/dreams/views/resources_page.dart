@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_app/Pages/sounds.dart';
+import 'package:sleep_app/dreams/views/sounds.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';

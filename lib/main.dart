@@ -12,7 +12,7 @@ import 'dreams/services/startup_service.dart';
 import 'dreams/services/notification_permissions.dart';
 import 'dreams/services/welcome_message.dart';
 import 'components/menu_button.dart';
-import 'Pages/login_screen.dart';
+import 'dreams/views/login_screen.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
