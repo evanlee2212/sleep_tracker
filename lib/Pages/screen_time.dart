@@ -6,6 +6,8 @@ import 'package:animations/animations.dart';
 import 'package:usage_stats/usage_stats.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import '../components/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ScreenTimePage extends StatefulWidget {
   const ScreenTimePage({super.key});
@@ -20,7 +22,6 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
   String peakHour = '-';
   Duration peakHourDuration = Duration.zero;
   bool isLoading = true;
-  bool isWeeklyView = false;
   bool isExpanded = true;
   int touchedIndex = -1;
 
@@ -84,152 +85,76 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
     }
   }
 
-  Future<void> exportCSV() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/screen_time_export.csv');
-    final buffer = StringBuffer();
-    buffer.writeln('App,Usage (minutes)');
-    appUsageToday.forEach((app, duration) {
-      buffer.writeln('$app,${duration.inMinutes}');
-    });
-    await file.writeAsString(buffer.toString());
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("CSV Exported!")));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    if (isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text("Screen Time Overview"), backgroundColor: Colors.deepPurpleAccent),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Screen Time Overview'),
-        backgroundColor: Colors.deepPurpleAccent,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.file_download),
-            onPressed: exportCSV,
-            tooltip: 'Export CSV',
-          )
-        ],
-      ),
-      body: PageTransitionSwitcher(
-        duration: const Duration(milliseconds: 500),
-        reverse: !isWeeklyView,
-        transitionBuilder: (child, animation, secondaryAnimation) {
-          return FadeThroughTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            child: child,
-          );
-        },
-        child: ListView(
-          key: ValueKey<bool>(isWeeklyView),
-          padding: const EdgeInsets.all(16),
-          children: [
-            Center(
-              child: Text(
-                "Today's Total Screen Time",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.grey.shade800 : Colors.deepPurple.shade50,
-                  borderRadius: BorderRadius.circular(12),
+      appBar: AppTheme.buildAppBar('Screen Time Overview'),
+      body: BackgroundWrapper(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Card(
+              color: Colors.white.withOpacity(0.95),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Today's Screen Time",
+                      style: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    _infoTile("Total Time: ${totalToday.inHours}h ${totalToday.inMinutes.remainder(60)}m"),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: exportCSV,
+                      style: AppTheme.elevatedButtonStyle,
+                      child: const Text('Export CSV'),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () => setState(() => isExpanded = !isExpanded),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _sectionTitle("Usage Breakdown"),
+                          const SizedBox(height: 10),
+                          if (isExpanded) _buildPieChart(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _sectionTitle("Peak Usage Hour Today"),
+                    const SizedBox(height: 10),
+                    _infoTile("$peakHour (${peakHourDuration.inMinutes} mins)"),
+                  ],
                 ),
-                child: Text(
-                  "${totalToday.inHours}h ${totalToday.inMinutes.remainder(60)}m",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
-                ),
               ),
             ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => setState(() => isExpanded = !isExpanded),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _sectionTitle("Usage Breakdown"),
-                  if (isExpanded) _buildPieChart(),
-                ],
-              ),
-            ),
-            _sectionTitle("App Usage Today"),
-            ..._buildAppUsageList(),
-            _buildLateNightSuggestions(),
-            _sectionTitle("Peak Usage Hour Today"),
-            _infoTile("$peakHour (${peakHourDuration.inMinutes} mins)", isDark),
-          ],
+          ),
         ),
       ),
     );
   }
 
   Widget _sectionTitle(String text) => Padding(
-    padding: const EdgeInsets.only(top: 20, bottom: 8),
-    child: Text(text, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-  );
-
-  Widget _infoTile(String content, bool isDark) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: isDark ? Colors.grey.shade800 : Colors.deepPurple.shade50,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Text(content, style: const TextStyle(fontSize: 18)),
-  );
-
-  Widget _buildLateNightSuggestions() {
-    final now = DateTime.now();
-    if (now.hour < 22) return const SizedBox();
-    final heavyApps = appUsageToday.entries.where((e) => e.value.inMinutes > 60).map((e) => e.key).toList();
-    if (heavyApps.isEmpty) return const SizedBox();
-
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.deepPurple.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("\u23F0 Late Night App Use", style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 6),
-          Text("You've spent a lot of time on: ${heavyApps.join(', ')}.\nConsider locking these apps to help improve sleep."),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _buildAppUsageList() {
-    final icons = {
-      'YouTube': FontAwesomeIcons.youtube,
-      'Instagram': FontAwesomeIcons.instagram,
-      'WhatsApp': FontAwesomeIcons.whatsapp,
-      'Chrome': FontAwesomeIcons.chrome,
-      'Other': FontAwesomeIcons.ellipsis,
-    };
-    final sortedApps = appUsageToday.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
-    return sortedApps.map((entry) {
-      return ListTile(
-        leading: FaIcon(icons[entry.key] ?? FontAwesomeIcons.mobile, color: Colors.deepPurpleAccent),
-        title: Text(entry.key),
-        trailing: Text("${entry.value.inHours}h ${entry.value.inMinutes.remainder(60)}m"),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(text, style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w600)),
       );
-    }).toList();
-  }
+
+  Widget _infoTile(String content) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.deepPurple.shade50,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(content, style: GoogleFonts.poppins(fontSize: 18)),
+      );
 
   Widget _buildPieChart() {
     final totalMinutes = appUsageToday.values.fold<int>(0, (sum, dur) => sum + dur.inMinutes);
@@ -243,7 +168,7 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
         title: "${item.key}\n${item.value.inHours}h ${item.value.inMinutes.remainder(60)}m",
         color: _getColorForApp(item.key),
         radius: isTouched ? 80 : 70,
-        titleStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white),
+        titleStyle: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.white),
       );
     }).toList();
 
@@ -268,6 +193,38 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
     );
   }
 
+Future<void> exportCSV() async {
+  try {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/screen_time_export.csv');
+    final buffer = StringBuffer();
+    buffer.writeln('App,Usage (minutes)');
+    appUsageToday.forEach((app, duration) {
+      buffer.writeln('$app,${duration.inMinutes}');
+    });
+    await file.writeAsString(buffer.toString());
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Success', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+        content: Text('Your screen time data has been exported successfully!', style: GoogleFonts.poppins()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK', style: GoogleFonts.poppins(color: Colors.deepPurple)),
+          ),
+        ],
+      ),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to export CSV: $e')),
+    );
+  }
+}
+
+
   Color _getColorForApp(String appName) {
     switch (appName) {
       case 'YouTube':
@@ -278,8 +235,6 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
         return Colors.greenAccent;
       case 'Chrome':
         return Colors.blueAccent;
-      case 'Other':
-        return Colors.grey;
       default:
         return Colors.deepPurpleAccent;
     }
