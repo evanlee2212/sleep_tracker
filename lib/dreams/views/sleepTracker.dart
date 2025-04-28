@@ -1,4 +1,6 @@
 //create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleep_app/Pages/sleepDiary.dart';
 import 'dart:async';
@@ -177,7 +179,11 @@ class _SleepTrackerState extends State<SleepTracker> {
                 return ListTile(
                   leading: const Icon(Icons.bedtime),
                   title: Text('Duration: ${log['duration']}'),
-                  subtitle: Text('Time: ${log['time']} \nQuality: ${log['quality']}'), // 🆕
+                  subtitle: Text('Time: ${log['time']} \nQuality: ${log['quality']}'),
+                  trailing: IconButton(
+                    onPressed: (){ _deleteLog(index); },
+                    icon: const Icon(Icons.delete),
+                  ),
                 );
               },
             ),
@@ -185,6 +191,28 @@ class _SleepTrackerState extends State<SleepTracker> {
         ],
       ),
     );
+  }
+
+  void _deleteLog(int index) async {
+    final log = presenter.getLog(index);
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('sleep_logs')
+          .where('time', isEqualTo: log['time'])
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+      }
+    }
+
+    setState(() {
+      presenter.removeSleepLog(index);
+    });
   }
 }
 
