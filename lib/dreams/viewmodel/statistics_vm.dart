@@ -1,117 +1,139 @@
-import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sleep_app/dreams/presenter/statistics_presenter.dart';
 
-class FakeFirebase {
-  static const List<String> LogTags = [
-    "good", "well rested", "restless", "amazing", "bad", "tired", "energized", "groggy", "good",
-    "alert", "well rested", "moody", "bad", "refreshed", "restless", "okay", "exhausted", "amazing", "drained",
-    "good", "well rested", "restless", "sluggish", "bad", "tired", "great", "lethargic", "good", "awake",
-    "well rested", "refreshed", "groggy", "restless", "good", "bad", "calm", "alert", "peaceful", "moody",
-    "okay", "tired", "good", "restless", "amazing", "well rested", "burnt out", "decent", "bad", "refreshed", "fatigued", 
-    "energized", "on edge", "restless", "good", "mentally sharp", "foggy", "heavy", "light", "groggy", "happy", "neutral",
-    "good", "bad", "meh", "uplifted", "restless", "so-so", "great", "tense", "free", "tired", "well rested", "good",
-    "bad", "sleepy", "ready", "moody", "recharged", "drained", "good", "unstable", "fine", "refreshed", "heavy-eyed",
-    "restless", "good", "fine", "bad", "chill", "groggy", "bright", "alert", "lazy", "motivated", "good"];
-  
-  List<TimeOfDay> bedTime = [];
-  List<TimeOfDay> wakeTime = [];
-  List<TimeOfDay> sleepHours = [];
-  
-  
-  FakeFirebase() {
-    final random = Random();
-    for (int i = 0; i < 100; i++) {
-      // Generate random bed time (between 8 PM and 2 AM)
-      final bed = TimeOfDay(
-        hour: random.nextInt(6) + 20 % 24, // 20–1 (8 PM to 1 AM)
-        minute: random.nextInt(60),
-      );
+class StatisticsModel extends ChangeNotifier {
+  List<Map<String, String>> Logs = [];
 
-      bedTime.add(bed);
+  StatisticsModel() {
+    init();
+  }
 
-      // Add 4 to 10 hours to bed time
-      int additionalMinutes = (random.nextInt(7) + 4) * 60; // 4–10 hours
-      int totalMinutes = bed.hour * 60 + bed.minute + additionalMinutes;
+  Future<void> init() async {
+    await fetchData();
+  }
 
-      final wake = TimeOfDay(
-        hour: (totalMinutes ~/ 60) % 24,
-        minute: totalMinutes % 60,
-      );
+  Future<void> fetchData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
 
-      wakeTime.add(wake);
+    final snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('sleep_logs')
+      .orderBy('time', descending: true)
+      .get();
+
+    Logs.clear();
+
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      Logs.add({
+        'time': data['time'] ?? '',
+        'duration': data['duration'] ?? '',
+        'quality': data['quality'] ?? '',
+      });
     }
-  }
-  
-}
 
-class statisticsModel extends ChangeNotifier {
-  FakeFirebase data = FakeFirebase();
-  Map<String, int> Tags = {};
-
-  statisticsModel() {
-    condenseTags();
-    calculateSleepTime();
+    print("Logs fetched: $Logs");
+    notifyListeners();
   }
 
-  void condenseTags() {
-    for (String verb in FakeFirebase.LogTags) {
-      if (Tags.containsKey(verb)) {
-        Tags[verb] = Tags[verb]! + 1;
-      } else {
-        Tags[verb] = 1;
-      }
-    }
-  }
+  List<Map<String, String>> getQuality(int days) {
+    List<Map<String, String>> filteredLogs = [];
+    DateTime now = DateTime.now();
 
-  void calculateSleepTime() {
-    data.sleepHours.clear();
+    for (var log in Logs) {
+      String? timeStr = log['time'];
+      String? durationStr = log['duration'];
+      String? qualityStr = log['quality'];
 
-    int size = min(data.bedTime.length, data.wakeTime.length);
-    final now = DateTime.now();
+      if (timeStr == null || timeStr.isEmpty || durationStr == null || qualityStr == null) continue;
 
-    for (int i = 0; i < size; i++){
-      final bed = data.bedTime[i];
-      final wake = data.wakeTime[i];
+      final parts = timeStr.split(' - ');
+      if (parts.length != 2) continue;
+      final timePart = parts[0];
+      final datePart = parts[1];
 
-      DateTime bedDateTime = DateTime(now.year, now.month, now.day, bed.hour, bed.minute);
-      DateTime wakeDateTime = DateTime(now.year, now.month, now.day, wake.hour, wake.minute);
+      final timeParts = timePart.split(':');
+      if (timeParts.length != 2) continue;
+      final hour = int.tryParse(timeParts[0]);
+      final minute = int.tryParse(timeParts[1]);
+      if (hour == null || minute == null) continue;
 
-      if (wakeDateTime.isBefore(bedDateTime)) {
-        wakeDateTime = wakeDateTime.add(Duration(days: 1));
-      }
+      final dateParts = datePart.split('/');
+      if (dateParts.length != 2) continue;
+      final month = int.tryParse(dateParts[0]);
+      final day = int.tryParse(dateParts[1]);
+      if (month == null || day == null) continue;
 
-      Duration sleepDuration = wakeDateTime.difference(bedDateTime);
+      DateTime logTime = DateTime(now.year, month, day, hour, minute);
 
-      data.sleepHours.add(TimeOfDay(
-        hour: sleepDuration.inHours,
-        minute: sleepDuration.inMinutes % 60,
-      ));
-    }
-  }
+      double? duration = double.tryParse(durationStr.split(' ')[0]);
+      if (duration == null) continue;
 
-  Map<String, int> getTags(int days) {
-    Map<String, int> filteredTags = {};
-    if (Tags.length <= days){
-      return Map.from(Tags);
-    } else {
-      int startIndex = Tags.length - days;
+      DateTime endTime = logTime.add(Duration(hours: duration.toInt(), minutes: ((duration - duration.toInt()) * 60).toInt()));
 
-      for (int i = startIndex; i < Tags.length; i++){
-        filteredTags[Tags.keys.elementAt(i)] = Tags.values.elementAt(i);
+      print('Log Time: $logTime, End Time: $endTime, Duration: $duration, Now: $now');
+
+      if (now.difference(logTime).inDays <= days || now.difference(endTime).inDays <= days) {
+        filteredLogs.add({
+          'time': timeStr,
+          'duration': durationStr,
+          'quality': qualityStr,
+        });
+
       }
     }
 
-    return filteredTags;
+    notifyListeners();
+    return filteredLogs;
   }
+
+
 
   List<TimeOfDay> getHours(int days) {
-    if (data.sleepHours.length <= days){
-      return List.from(data.sleepHours);
+    final now = DateTime.now();
+    List<TimeOfDay> sleepHours = [];
+
+    for (var log in Logs) {
+      final timeStr = log['time'];
+      final durationStr = log['duration'];
+      if (timeStr == null || timeStr.isEmpty || durationStr == null || durationStr.isEmpty) continue;
+
+
+      final parts = timeStr.split(' - ');
+      if (parts.length != 2) continue;
+      final timePart = parts[0];
+      final datePart = parts[1];
+
+      final timeParts = timePart.split(':');
+      if (timeParts.length != 2) continue;
+      final hour = int.tryParse(timeParts[0]);
+      final minute = int.tryParse(timeParts[1]);
+      if (hour == null || minute == null) continue;
+
+      final dateParts = datePart.split('/');
+      if (dateParts.length != 2) continue;
+      final month = int.tryParse(dateParts[0]);
+      final day = int.tryParse(dateParts[1]);
+      if (month == null || day == null) continue;
+
+      DateTime startTime = DateTime(now.year, month, day, hour, minute);
+
+      double? duration = double.tryParse(durationStr.split(' ')[0]);
+      if (duration == null) continue;
+
+      DateTime endTime = startTime.add(Duration(hours: duration.toInt(), minutes: ((duration - duration.toInt()) * 60).toInt()));
+
+      if (now.difference(startTime).inDays <= days || now.difference(endTime).inDays <= days) {
+        sleepHours.add(TimeOfDay(hour: startTime.hour, minute: startTime.minute));
+      }
     }
 
-    return List.from(data.sleepHours.getRange(data.sleepHours.length-days, data.sleepHours.length));
+    return sleepHours;
   }
+
+
 }

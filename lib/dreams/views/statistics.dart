@@ -61,13 +61,11 @@ class QuantityGraphPage extends StatefulWidget {
 }
 
 class _QuantityGraphPageState extends State<QuantityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  StatisticsPresenter presenter = StatisticsPresenter();
   String selectedRange = "Week";
 
   @override
   Widget build(BuildContext context) {
-    final List<TimeOfDay> hours = presenter.getHoursFor(selectedRange);
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -100,14 +98,29 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
             ],
           ),
           SizedBox(height: 20),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            child: BarChart(
-              BarChartData(barGroups: getGroups(hours)),
-              duration: Duration(milliseconds: 150),
-              curve: Curves.linear,
-            ),
+          FutureBuilder<List<TimeOfDay>>(
+            future: presenter.getHoursFor(selectedRange),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('No data available');
+              }
+
+              final hours = snapshot.data!;
+
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                child: BarChart(
+                  BarChartData(barGroups: getGroups(hours)),
+                  duration: Duration(milliseconds: 150),
+                  curve: Curves.linear,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -146,90 +159,93 @@ class QualityGraphPage extends StatefulWidget {
 }
 
 class _QualityGraphPageState extends State<QualityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  StatisticsPresenter presenter = StatisticsPresenter();
   String selectedRange = "Week";
+  late Map<int, int> futureTags; // <-- FIX HERE
+
+  @override
+  void initState() {
+    super.initState();
+    futureTags = presenter.getTagsFor(selectedRange);
+  }
 
   @override
   Widget build(BuildContext context) {
     double radius = MediaQuery.of(context).size.width * 0.4;
-    final tags = presenter.getTagsFor(selectedRange);
+
+    final Map<int, int> tags = presenter.getTagsFor(selectedRange);
 
     return Center(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 80),
-                Text("Select Range:",
-                    style: TextStyle(fontSize: 18)
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 80),
+              Text("Select Range:", style: TextStyle(fontSize: 18)),
+              SizedBox(width: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DropdownButton<String>(
+                  value: selectedRange,
+                  items: ["Week", "Month", "Year"]
+                      .map((range) => DropdownMenuItem(
+                    value: range,
+                    child: Text(range),
+                  ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        selectedRange = value;
+                      });
+                    }
+                  },
                 ),
-                SizedBox(width: 10),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: DropdownButton<String>(
-                      value: selectedRange,
-                      items: ["Week", "Month", "Year"]
-                          .map((range)=> DropdownMenuItem(
-                        value: range,
-                        child: Text(range),
-                      )).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedRange = value;
-                          });
-                        }
-                      },
-                    )
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: 300,
-              height: 300,
-              child: PieChart(
-                PieChartData(
-                  sections: getSections(tags, radius),
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 0,
-                  pieTouchData: PieTouchData(enabled: false),
-                  startDegreeOffset: 0,
-                ),
-                duration: Duration(milliseconds: 150),
-                curve: Curves.linear,
               ),
+            ],
+          ),
+          SizedBox(height: 20),
+          tags.isEmpty
+              ? Text("No data available")
+              : SizedBox(
+            width: 300,
+            height: 300,
+            child: PieChart(
+              PieChartData(
+                sections: getSections(tags, radius),
+                sectionsSpace: 2,
+                centerSpaceRadius: 0,
+                pieTouchData: PieTouchData(enabled: false),
+                startDegreeOffset: 0,
+              ),
+              duration: Duration(milliseconds: 150),
+              curve: Curves.linear,
             ),
-          ],
+          ),
+        ],
       ),
     );
   }
 
-  List<PieChartSectionData> getSections(Map<String, int> tags, double radius){
+  List<PieChartSectionData> getSections(Map<int, int> tags, double radius) {
     List<PieChartSectionData> sections = [];
     final random = Random();
-    int total = 0;
-
-    for (var entry in tags.values){
-      total += entry;
-    }
 
     for (var entry in tags.entries) {
-      double sectionValue = entry.value.toDouble();
-
       PieChartSectionData section = PieChartSectionData(
-        value: sectionValue,
-        title: entry.key,
-        color: Color.fromARGB(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
+        value: entry.value.toDouble(),
+        title: entry.key.toString(),
+        color: Color.fromARGB(
+            255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
         radius: radius,
         titleStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: Colors.black,
         ),
-        titlePositionPercentageOffset: 0.5
+        titlePositionPercentageOffset: 0.5,
       );
 
       sections.add(section);
@@ -238,5 +254,4 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
     return sections;
   }
 }
-
 

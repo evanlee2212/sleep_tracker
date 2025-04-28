@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_app/dreams/views/statistics.dart';
 import 'package:sleep_app/dreams/viewmodel/statistics_vm.dart';
 
-class statisticsPresenter {
-  statisticsModel model = new statisticsModel();
+class StatisticsPresenter {
+  final StatisticsModel model = StatisticsModel();
 
-  Map<String, int> getTagsFor(String range) {
+  Map<int, int> getTagsFor(String range) {
     int days = 0;
 
-    switch(range) {
+    switch (range) {
       case "Week":
         days = 7;
         break;
@@ -20,13 +19,30 @@ class statisticsPresenter {
         break;
     }
 
-    return model.getTags(days);
+    final filteredLogs = model.getQuality(days);
+
+    Map<int, int> qualityCounts = {};
+
+    for (var log in filteredLogs) {
+      final qualityString = log['quality'];
+      if (qualityString == null || qualityString.isEmpty) continue;
+
+      final cleanedQuality = qualityString.split('/').first.trim();
+
+      final quality = int.tryParse(cleanedQuality);
+      if (quality == null) continue;
+
+      qualityCounts[quality] = (qualityCounts[quality] ?? 0) + 1;
     }
 
-  List<TimeOfDay> getHoursFor(String range) {
-    int days = 0;
+    return qualityCounts;
+  }
 
-    switch(range) {
+  Future<List<TimeOfDay>> getHoursFor(String range) async {
+    await model.fetchData();
+
+    int days = 0;
+    switch (range) {
       case "Week":
         days = 7;
         break;
@@ -40,6 +56,10 @@ class statisticsPresenter {
 
     return model.getHours(days);
   }
+
 }
+
+
+
 
 
