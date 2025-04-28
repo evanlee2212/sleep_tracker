@@ -36,7 +36,6 @@ class StatisticsModel extends ChangeNotifier {
       });
     }
 
-    print("Logs fetched: $Logs");
     notifyListeners();
   }
 
