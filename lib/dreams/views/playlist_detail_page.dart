@@ -10,7 +10,7 @@ import '../../components/theme.dart';
 
 class PlaylistDetailPage extends StatefulWidget {
   final Playlist playlist;
-  const PlaylistDetailPage({Key? key, required this.playlist}) : super(key: key);
+  const PlaylistDetailPage({super.key, required this.playlist});
 
   @override
   _PlaylistDetailPageState createState() => _PlaylistDetailPageState();

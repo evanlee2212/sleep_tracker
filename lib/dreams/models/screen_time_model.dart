@@ -1,4 +1,3 @@
-import 'package:usage_stats/usage_stats.dart';
 
 class ScreenTimeModel {
   Duration totalToday = Duration.zero;

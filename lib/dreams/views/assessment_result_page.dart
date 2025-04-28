@@ -9,7 +9,7 @@ import '../../components/theme.dart';
 
 class AssessmentResultPage extends StatelessWidget {
   final List<Goal> goals;
-  const AssessmentResultPage({Key? key, required this.goals}) : super(key: key);
+  const AssessmentResultPage({super.key, required this.goals});
 
   @override
   Widget build(BuildContext context) {

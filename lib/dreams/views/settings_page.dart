@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sleep_app/components/menu_button.dart';
 import 'package:sleep_app/components/theme.dart';
 import 'package:sleep_app/components/theme_manager.dart';
 import 'package:sleep_app/dreams/contracts/settings_contract.dart';
 import 'package:sleep_app/dreams/presenter/settings_presenter.dart';
+import 'package:sleep_app/dreams/views/login_screen.dart';
 import 'notifications_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -28,7 +30,10 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
 
   @override
   void navigateToNotifications() {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NotificationsPage()),
+    );
   }
 
   @override
@@ -40,11 +45,26 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
     });
   }
 
+  Future<void> _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (route) => false, 
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to log out: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        extendBodyBehindAppBar: true, 
+        extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: AppTheme.buildAppBar('Settings'),
         body: SafeArea(
@@ -52,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 40),
                   MenuButton(
@@ -63,6 +83,11 @@ class _SettingsPageState extends State<SettingsPage> implements SettingsContract
                   MenuButton(
                     text: 'Switch Theme',
                     onPressed: () => _presenter.onAppThemePressed(),
+                  ),
+                  const SizedBox(height: 40),
+                  MenuButton(
+                    text: 'Log Out',
+                    onPressed: _logout,
                   ),
                 ],
               ),

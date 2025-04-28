@@ -59,8 +59,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
     if (picked != null) {
       setState(() {
-        if (isGoodMorning) _goodMorningTime = picked;
-        else _windDownTime = picked;
+        if (isGoodMorning) {
+          _goodMorningTime = picked;
+        } else {
+          _windDownTime = picked;
+        }
       });
       await _saveSettings();
     }

@@ -40,7 +40,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   void navigateToSleepTracker() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SleepTracker()),
+      MaterialPageRoute(builder: (context) => const SleepTracker()),
     );
   }
 
@@ -48,7 +48,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   void navigateToScreenTime() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ScreenTimePage()),
+      MaterialPageRoute(builder: (context) => const ScreenTimePage()),
     );
   }
 
@@ -56,7 +56,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   void navigateToSleepCycles() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SleepCycles()),
+      MaterialPageRoute(builder: (context) => const SleepCycles()),
     );
   }
 
@@ -64,7 +64,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
   void navigateToSleepStatistics() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => StatisticsPage()),
+      MaterialPageRoute(builder: (context) => const StatisticsPage()),
     );
   }
 
@@ -77,7 +77,7 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Card(
-              color: Theme.of(context).cardColor,
+              color: Colors.white, 
               elevation: 6,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Padding(
@@ -90,30 +90,25 @@ class _SleepDataState extends State<SleepData> implements SleepDataContractView 
                       text: 'Sleep Diary',
                       onPressed: () => _presenter.onSleepDiaryPressed(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     MenuButton(
                       text: 'Sleep Tracker',
                       onPressed: () => _presenter.onSleepTrackerPressed(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     MenuButton(
                       text: 'Sleep Cycles',
                       onPressed: () => _presenter.onSleepCyclesPressed(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     MenuButton(
                       text: 'Sleep Statistics',
                       onPressed: () => _presenter.onSleepStatisticsPressed(),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     MenuButton(
                       text: 'Screen Time',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ScreenTimePage()),
-                        );
-                      },
+                      onPressed: () => _presenter.onScreenTimePressed(),
                     ),
                   ],
                 ),

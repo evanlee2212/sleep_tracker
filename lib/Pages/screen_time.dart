@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:animations/animations.dart';
 import 'package:usage_stats/usage_stats.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';

@@ -9,7 +9,7 @@ import 'past_assessments_page.dart';
 import '../../components/theme.dart';
 
 class AssessmentPage extends StatefulWidget {
-  const AssessmentPage({Key? key}) : super(key: key);
+  const AssessmentPage({super.key});
 
   @override
   _AssessmentPageState createState() => _AssessmentPageState();

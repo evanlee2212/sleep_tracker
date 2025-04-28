@@ -5,7 +5,7 @@ import '../repositories/assessment_repository.dart';
 import '../../components/theme.dart';
 
 class PastAssessmentsPage extends StatelessWidget {
-  const PastAssessmentsPage({Key? key}) : super(key: key);
+  const PastAssessmentsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

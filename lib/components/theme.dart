@@ -1,6 +1,7 @@
-import 'dart:ui'; 
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart'; 
 
 class AppTheme {
   static final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
@@ -12,20 +13,27 @@ class AppTheme {
     elevation: 4,
   );
 
- static AppBar buildAppBar(String title, {List<Widget>? actions}) {
+ static AppBar buildAppBar(String title, {List<Widget>? actions, Brightness? brightness}) {
+  final isDark = brightness == Brightness.dark;
+
   return AppBar(
     title: Text(
       title,
-      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 24,
+        color: isDark ? Colors.white : Colors.black,
+      ),
     ),
-    backgroundColor: Colors.transparent, 
+    backgroundColor: isDark ? Colors.black : Colors.white,
     elevation: 0,
     toolbarHeight: 100,
     actions: actions,
     centerTitle: true,
+    iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black),
+    systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
   );
 }
-
 
   static ThemeData lightTheme = ThemeData(
     fontFamily: GoogleFonts.poppins().fontFamily,
@@ -35,6 +43,7 @@ class AppTheme {
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
+      toolbarHeight: 100,
     ),
   );
 }

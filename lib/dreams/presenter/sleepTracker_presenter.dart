@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:sleep_app/dreams/viewmodel/sleepTrackerModel.dart';
 
 class sleepTrackerPresenter {
-  late sleepTrackerModel model = new sleepTrackerModel();
+  late sleepTrackerModel model = sleepTrackerModel();
 
   void addSleepLog(String durationInHours, int sleepQuality){
     model.addLog(durationInHours, sleepQuality);

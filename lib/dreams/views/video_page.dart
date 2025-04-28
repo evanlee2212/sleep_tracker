@@ -10,7 +10,7 @@ import 'playlist_detail_page.dart';
 import '../../components/theme.dart';
 
 class VideoPage extends StatefulWidget {
-  const VideoPage({Key? key}) : super(key: key);
+  const VideoPage({super.key});
 
   @override
   _VideoPageState createState() => _VideoPageState();
@@ -195,7 +195,7 @@ class _VideoPageState extends State<VideoPage>
 
 class YoutubePlayerScreen extends StatefulWidget {
   final String videoId;
-  const YoutubePlayerScreen({Key? key, required this.videoId}) : super(key: key);
+  const YoutubePlayerScreen({super.key, required this.videoId});
 
   @override
   _YoutubePlayerScreenState createState() => _YoutubePlayerScreenState();

@@ -108,59 +108,78 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _fadeController.forward();
   }
 
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
 
-@override
-Widget build(BuildContext context) {
-  return BackgroundWrapper(
-    child: Scaffold(
-      extendBodyBehindAppBar: true, 
-      backgroundColor: Colors.transparent,
-      appBar: AppTheme.buildAppBar('', actions: [
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage()));
-          },
-        )
-      ]),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Transform.translate(
-                    offset: const Offset(0, -55),
-                    child: CircleAvatar(
-                      radius: 104,
-                      backgroundColor: Colors.indigo,
-                      child: const CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/logo.png'),
-                        radius: 100,
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundWrapper(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16, top: 8),
+                      child: IconButton(
+                        icon: const Icon(Icons.settings),
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SettingsPage()),
+                          );
+                        },
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                MenuButton(
-                  text: 'Sleep Data',
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SleepData())),
-                ),
-                const SizedBox(height: 20),
-                MenuButton(
-                  text: 'Resources',
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ResourcesPage())),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 10),
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Transform.translate(
+                      offset: const Offset(0, -55),
+                      child: CircleAvatar(
+                        radius: 104,
+                        backgroundColor: Colors.indigo,
+                        child: const CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/logo.png'),
+                          radius: 100,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  MenuButton(
+                    text: 'Sleep Data',
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SleepData()),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  MenuButton(
+                    text: 'Resources',
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ResourcesPage()),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
