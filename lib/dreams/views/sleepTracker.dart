@@ -1,10 +1,11 @@
-//create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
 import 'package:flutter/material.dart';
 import 'package:sleep_app/dreams/views/sleepDiary.dart';
 import 'dart:async';
 
 import 'package:sleep_app/dreams/presenter/sleepTracker_presenter.dart';
 import 'package:sleep_app/dreams/viewmodel/sleepDiaryModel.dart';
+import '../../components/theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SleepTracker extends StatefulWidget {
   const SleepTracker({super.key});
@@ -14,10 +15,10 @@ class SleepTracker extends StatefulWidget {
 }
 
 class _SleepTrackerState extends State<SleepTracker> {
-  sleepTrackerPresenter presenter = new sleepTrackerPresenter();
+  sleepTrackerPresenter presenter = sleepTrackerPresenter();
   bool _isPlaying = false;
   Timer? _timer;
-  int _elapsedTime = 0; // In seconds
+  int _elapsedTime = 0;
 
   @override
   void initState() {
@@ -46,27 +47,27 @@ class _SleepTrackerState extends State<SleepTracker> {
         _isPlaying = false;
       });
       final durationInHours = (_elapsedTime / 3600).toStringAsFixed(2);
-      _getSleepQualityAndLog(durationInHours); //
+      _getSleepQualityAndLog(durationInHours);
     }
   }
 
   Future<void> _getSleepQualityAndLog(String duration) async {
-    int? selectedQuality = await _showSleepQualityDialog(); //
+    int? selectedQuality = await _showSleepQualityDialog();
 
     if (selectedQuality != null) {
-      _logSleepSession(duration, selectedQuality); //
-      _showSleepDuration(duration, selectedQuality); //
+      _logSleepSession(duration, selectedQuality);
+      _showSleepDuration(duration, selectedQuality);
     }
   }
 
   Future<int?> _showSleepQualityDialog() async {
-    int selected = 5; // Default to 5
+    int selected = 5;
 
     return showDialog<int>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Rate How You Felt You've Slept (1-10)"),
+          title: Text("Rate How You Slept (1-10)", style: GoogleFonts.poppins()),
           content: StatefulBuilder(
             builder: (context, setState) => Column(
               mainAxisSize: MainAxisSize.min,
@@ -108,14 +109,15 @@ class _SleepTrackerState extends State<SleepTracker> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sleep Summary'),
-        content: Text('You slept for $durationInHours hours.\n'
-            'Sleep quality: $quality/10\n'
-            'Add to Sleep Dairy?'),
+        title: Text('Sleep Summary', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+        content: Text(
+          'You slept for $durationInHours hours.\nSleep quality: $quality/10\nAdd to Sleep Diary?',
+          style: GoogleFonts.poppins(),
+        ),
         actions: [
           TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Not now'),
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Not now'),
           ),
           TextButton(
             onPressed: () {
@@ -130,7 +132,7 @@ class _SleepTrackerState extends State<SleepTracker> {
               );
             },
             child: const Text('OK'),
-          )
+          ),
         ],
       ),
     );
@@ -141,51 +143,75 @@ class _SleepTrackerState extends State<SleepTracker> {
     final color = Theme.of(context).primaryColor;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sleep Tracker')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          const Center(child: Text('Track Sleep Duration & Quality Below.')),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                key: const Key('play button'),
-                onPressed: _isPlaying ? null : _startTimer,
-                iconSize: 48.0,
-                icon: const Icon(Icons.play_arrow),
-                color: color,
+      appBar: AppTheme.buildAppBar('Sleep Tracker'),
+      body: BackgroundWrapper(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Card(
+              color: Colors.white.withOpacity(0.95),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Track Sleep Duration & Quality', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          key: const Key('play button'),
+                          onPressed: _isPlaying ? null : _startTimer,
+                          iconSize: 50.0,
+                          icon: const Icon(Icons.play_arrow),
+                          color: color,
+                        ),
+                        const SizedBox(width: 20),
+                        IconButton(
+                          key: const Key('stop button'),
+                          onPressed: _isPlaying ? _stopTimer : null,
+                          iconSize: 50.0,
+                          icon: const Icon(Icons.stop),
+                          color: color,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    Text('Sleep Log', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const Divider(height: 30, thickness: 1.5),
+                    SizedBox(
+                      height: 400,
+                      child: presenter.getSleepLogsLength() > 0
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: presenter.getSleepLogsLength(),
+                              itemBuilder: (context, index) {
+                                final log = presenter.getLog(index);
+                                return Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  elevation: 3,
+                                  child: ListTile(
+                                    leading: const Icon(Icons.bedtime, color: Colors.deepPurpleAccent),
+                                    title: Text('Duration: ${log['duration']}', style: GoogleFonts.poppins()),
+                                    subtitle: Text('Time: ${log['time']}\nQuality: ${log['quality']}/10', style: GoogleFonts.poppins()),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text('No sleep logs yet.', style: GoogleFonts.poppins(fontSize: 16)),
+                            ),
+                    ),
+                  ],
+                ),
               ),
-              IconButton(
-                key: const Key('stop button'),
-                onPressed: _isPlaying ? _stopTimer : null,
-                iconSize: 48.0,
-                icon: const Icon(Icons.stop),
-                color: color,
-              ),
-            ],
-          ),
-          const Divider(height: 40),
-          const Text('Sleep Log:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Expanded(
-            child: ListView.builder(
-              itemCount: presenter.getSleepLogsLength(),
-              itemBuilder: (context, index) {
-                final log = presenter.getLog(index);
-                return ListTile(
-                  leading: const Icon(Icons.bedtime),
-                  title: Text('Duration: ${log['duration']}'),
-                  subtitle: Text('Time: ${log['time']} \nQuality: ${log['quality']}'), // 🆕
-                );
-              },
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-

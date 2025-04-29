@@ -168,7 +168,7 @@ class QualityGraphPage extends StatefulWidget {
 }
 
 class _QualityGraphPageState extends State<QualityGraphPage> {
-  StatisticsPresenter presenter = new StatisticsPresenter();
+  StatisticsPresenter presenter = StatisticsPresenter();
   String selectedRange = "Week";
   late Map<String, int> futureTags;
 
