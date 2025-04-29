@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleep_app/dreams/views/sleepDiary.dart';
 import 'dart:async';
@@ -197,6 +199,10 @@ class _SleepTrackerState extends State<SleepTracker> {
                                     leading: const Icon(Icons.bedtime, color: Colors.deepPurpleAccent),
                                     title: Text('Duration: ${log['duration']}', style: GoogleFonts.poppins()),
                                     subtitle: Text('Time: ${log['time']}\nQuality: ${log['quality']}/10', style: GoogleFonts.poppins()),
+                                    trailing: IconButton(
+                                      onPressed: (){ _deleteLog(index); },
+                                      icon: const Icon(Icons.delete),
+                                    ),
                                   ),
                                 );
                               },
@@ -213,5 +219,27 @@ class _SleepTrackerState extends State<SleepTracker> {
         ),
       ),
     );
+  }
+
+  void _deleteLog(int index) async {
+    final log = presenter.getLog(index);
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('sleep_logs')
+          .where('time', isEqualTo: log['time'])
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+      }
+    }
+
+    setState(() {
+      presenter.removeSleepLog(index);
+    });
   }
 }
