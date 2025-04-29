@@ -4,7 +4,7 @@ import 'package:sleep_app/dreams/viewmodel/statistics_vm.dart';
 class StatisticsPresenter {
   final StatisticsModel model = StatisticsModel();
 
-  Map<int, int> getTagsFor(String range) {
+  Map<String, int> getTagsFor(String range) {
     int days = 0;
 
     switch (range) {
@@ -21,7 +21,7 @@ class StatisticsPresenter {
 
     final filteredLogs = model.getQuality(days);
 
-    Map<int, int> qualityCounts = {};
+    Map<String, int> qualityCounts = {};
 
     for (var log in filteredLogs) {
       final qualityString = log['quality'];
@@ -32,7 +32,7 @@ class StatisticsPresenter {
       final quality = int.tryParse(cleanedQuality);
       if (quality == null) continue;
 
-      qualityCounts[quality] = (qualityCounts[quality] ?? 0) + 1;
+      qualityCounts[quality.toString()] = (qualityCounts[quality.toString()] ?? 0) + 1;
     }
 
     return qualityCounts;

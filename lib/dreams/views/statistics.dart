@@ -68,48 +68,38 @@ class QuantityGraphPage extends StatefulWidget {
 }
 
 class _QuantityGraphPageState extends State<QuantityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  StatisticsPresenter presenter = StatisticsPresenter();
   String selectedRange = "Week";
 
   @override
   Widget build(BuildContext context) {
-    final List<TimeOfDay> hours = presenter.getHoursFor(selectedRange);
-
     return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Card(
-              color: Colors.white.withOpacity(0.9),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Select Range:", style: TextStyle(fontSize: 16)),
-                    const SizedBox(width: 10),
-                    DropdownButton<String>(
-                      value: selectedRange,
-                      underline: Container(),
-                      items: ["Week", "Month", "Year"]
-                          .map((range) => DropdownMenuItem(
-                                value: range,
-                                child: Text(range),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedRange = value;
-                          });
-                        }
-                      },
-                    ),
-                  ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 80),
+              Text("Select Range:", style: TextStyle(fontSize: 18)),
+              SizedBox(width: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DropdownButton<String>(
+                  value: selectedRange,
+                  items: ["Week", "Month", "Year"]
+                      .map((range) => DropdownMenuItem(
+                    value: range,
+                    child: Text(range),
+                  ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        selectedRange = value;
+                      });
+                    }
+                  },
                 ),
               ),
             ],
@@ -178,9 +168,9 @@ class QualityGraphPage extends StatefulWidget {
 }
 
 class _QualityGraphPageState extends State<QualityGraphPage> {
-  statisticsPresenter presenter = new statisticsPresenter();
+  StatisticsPresenter presenter = new StatisticsPresenter();
   String selectedRange = "Week";
-  late Map<int, int> futureTags; // <-- FIX HERE
+  late Map<String, int> futureTags;
 
   @override
   void initState() {
@@ -189,59 +179,62 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     double radius = MediaQuery.of(context).size.width * 0.4;
-    final tags = presenter.getTagsFor(selectedRange);
+
+    final Map<String, int> tags = presenter.getTagsFor(selectedRange).cast<String, int>();
 
     return Center(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 80),
-                Text("Select Range:",
-                    style: TextStyle(fontSize: 18)
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 80),
+              Text("Select Range:", style: TextStyle(fontSize: 18)),
+              SizedBox(width: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DropdownButton<String>(
+                  value: selectedRange,
+                  items: ["Week", "Month", "Year"]
+                      .map((range) => DropdownMenuItem(
+                    value: range,
+                    child: Text(range),
+                  ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        selectedRange = value;
+                      });
+                    }
+                  },
                 ),
-                SizedBox(width: 10),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: DropdownButton<String>(
-                      value: selectedRange,
-                      items: ["Week", "Month", "Year"]
-                          .map((range)=> DropdownMenuItem(
-                        value: range,
-                        child: Text(range),
-                      )).toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedRange = value;
-                          });
-                        }
-                      },
-                    )
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: 300,
-              height: 300,
-              child: PieChart(
-                PieChartData(
-                  sections: getSections(tags, radius),
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 0,
-                  pieTouchData: PieTouchData(enabled: false),
-                  startDegreeOffset: 0,
-                ),
-                duration: Duration(milliseconds: 150),
-                curve: Curves.linear,
               ),
+            ],
+          ),
+          SizedBox(height: 20),
+          tags.isEmpty
+              ? Text("No data available")
+              : SizedBox(
+            width: 300,
+            height: 300,
+            child: PieChart(
+              PieChartData(
+                sections: getSections(tags, radius),
+                sectionsSpace: 2,
+                centerSpaceRadius: 0,
+                pieTouchData: PieTouchData(enabled: false),
+                startDegreeOffset: 0,
+              ),
+              duration: Duration(milliseconds: 150),
+              curve: Curves.linear,
             ),
-          ],
+          ),
+        ],
       ),
     );
   }

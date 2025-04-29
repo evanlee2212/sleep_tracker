@@ -74,8 +74,6 @@ class StatisticsModel extends ChangeNotifier {
 
       DateTime endTime = logTime.add(Duration(hours: duration.toInt(), minutes: ((duration - duration.toInt()) * 60).toInt()));
 
-      print('Log Time: $logTime, End Time: $endTime, Duration: $duration, Now: $now');
-
       if (now.difference(logTime).inDays <= days || now.difference(endTime).inDays <= days) {
         filteredLogs.add({
           'time': timeStr,
