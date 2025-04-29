@@ -68,7 +68,7 @@ class QuantityGraphPage extends StatefulWidget {
 }
 
 class _QuantityGraphPageState extends State<QuantityGraphPage> {
-  statisticsPresenter presenter = statisticsPresenter();
+  statisticsPresenter presenter = new statisticsPresenter();
   String selectedRange = "Week";
 
   @override
@@ -112,27 +112,34 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Card(
-              color: Colors.white.withOpacity(0.9),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: SizedBox(
-                width: double.infinity,
+            ],
+          ),
+          SizedBox(height: 20),
+          FutureBuilder<List<TimeOfDay>>(
+            future: presenter.getHoursFor(selectedRange),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('No data available');
+              }
+
+              final hours = snapshot.data!;
+
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
                 height: 300,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: BarChart(
-                    BarChartData(barGroups: getGroups(hours)),
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  ),
+                child: BarChart(
+                  BarChartData(barGroups: getGroups(hours)),
+                  duration: Duration(milliseconds: 150),
+                  curve: Curves.linear,
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -141,6 +148,7 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
     List<BarChartGroupData> groupData = [];
 
     for (int i = 0; i < hours.length; i++) {
+      // Convert TimeOfDay to a double (e.g. 14:30 => 14.5)
       double totalHours = hours[i].hour + hours[i].minute / 60.0;
       groupData.add(generateGroupData(i, totalHours));
     }
@@ -149,14 +157,18 @@ class _QuantityGraphPageState extends State<QuantityGraphPage> {
   }
 
   BarChartGroupData generateGroupData(int x, double y) {
+    int showingTooltip = -1;
+
     return BarChartGroupData(
       x: x,
+      showingTooltipIndicators: showingTooltip == x ? [0] : [],
       barRods: [
         BarChartRodData(toY: y, color: Colors.deepPurpleAccent, width: 16),
       ],
     );
   }
 }
+
 
 class QualityGraphPage extends StatefulWidget {
   const QualityGraphPage({super.key});
@@ -166,40 +178,42 @@ class QualityGraphPage extends StatefulWidget {
 }
 
 class _QualityGraphPageState extends State<QualityGraphPage> {
-  statisticsPresenter presenter = statisticsPresenter();
+  statisticsPresenter presenter = new statisticsPresenter();
   String selectedRange = "Week";
+  late Map<int, int> futureTags; // <-- FIX HERE
+
+  @override
+  void initState() {
+    super.initState();
+    futureTags = presenter.getTagsFor(selectedRange);
+  }
 
   @override
   Widget build(BuildContext context) {
-    double radius = MediaQuery.of(context).size.width * 0.35;
+    double radius = MediaQuery.of(context).size.width * 0.4;
     final tags = presenter.getTagsFor(selectedRange);
 
     return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Card(
-              color: Colors.white.withOpacity(0.9),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Select Range:", style: TextStyle(fontSize: 16)),
-                    const SizedBox(width: 10),
-                    DropdownButton<String>(
+            Row(
+              children: [
+                SizedBox(width: 80),
+                Text("Select Range:",
+                    style: TextStyle(fontSize: 18)
+                ),
+                SizedBox(width: 10),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DropdownButton<String>(
                       value: selectedRange,
-                      underline: Container(),
                       items: ["Week", "Month", "Year"]
-                          .map((range) => DropdownMenuItem(
-                                value: range,
-                                child: Text(range),
-                              ))
-                          .toList(),
+                          .map((range)=> DropdownMenuItem(
+                        value: range,
+                        child: Text(range),
+                      )).toList(),
                       onChanged: (value) {
                         if (value != null) {
                           setState(() {
@@ -207,53 +221,61 @@ class _QualityGraphPageState extends State<QualityGraphPage> {
                           });
                         }
                       },
-                    ),
-                  ],
+                    )
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 20),
-            Card(
-              color: Colors.white.withOpacity(0.9),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
-              child: SizedBox(
-                width: 300,
-                height: 300,
-                child: PieChart(
-                  PieChartData(
-                    sections: getSections(tags, radius),
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 0,
-                    pieTouchData: PieTouchData(enabled: false),
-                    startDegreeOffset: 0,
-                  ),
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
+            SizedBox(height: 20),
+            SizedBox(
+              width: 300,
+              height: 300,
+              child: PieChart(
+                PieChartData(
+                  sections: getSections(tags, radius),
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 0,
+                  pieTouchData: PieTouchData(enabled: false),
+                  startDegreeOffset: 0,
                 ),
+                duration: Duration(milliseconds: 150),
+                curve: Curves.linear,
               ),
             ),
           ],
-        ),
       ),
     );
   }
 
-  List<PieChartSectionData> getSections(Map<String, int> tags, double radius) {
+  List<PieChartSectionData> getSections(Map<String, int> tags, double radius){
     List<PieChartSectionData> sections = [];
     final random = Random();
+    int total = 0;
+
+    for (var entry in tags.values){
+      total += entry;
+    }
 
     for (var entry in tags.entries) {
-      sections.add(PieChartSectionData(
-        value: entry.value.toDouble(),
+      double sectionValue = entry.value.toDouble();
+
+      PieChartSectionData section = PieChartSectionData(
+        value: sectionValue,
         title: entry.key,
         color: Color.fromARGB(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)),
         radius: radius,
-        titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
-        titlePositionPercentageOffset: 0.5,
-      ));
+        titleStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+        ),
+        titlePositionPercentageOffset: 0.5
+      );
+
+      sections.add(section);
     }
 
     return sections;
   }
 }
+
+
