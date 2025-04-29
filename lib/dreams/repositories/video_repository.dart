@@ -36,12 +36,32 @@ class VideoRepository {
         category: 'Research on Sleep',
         videoUrl: 'https://www.youtube.com/watch?v=gbQFSMayJxk',
       ),
+      VideoResource(
+        title: 'Unlock Better Sleep: 4 Powerful Routines to Beat Insomnia',
+        category: 'Research on Sleep',
+        videoUrl: 'https://www.youtube.com/watch?v=4WASgOyGjjQ&t=70s',
+      ),
+      VideoResource(
+        title: 'A walk through the stages of sleep | Sleeping with Science, a TED series',
+        category: 'Research on Sleep',
+        videoUrl: 'https://www.youtube.com/watch?v=eM2VWspRpfk',
+      ),
+      VideoResource(
+        title: 'The Dreaming Mind: Waking the Mysteries of Sleep',
+        category: 'Research on Sleep',
+        videoUrl: 'https://www.youtube.com/watch?v=wvvovktKKa4',
+      ),
 
       //Relaxation Techniques
       VideoResource(
         title: 'Guided Meditation for Sleep',
         category: 'Meditation & Yoga',
         videoUrl: 'https://www.youtube.com/watch?v=v7SN-d4qXx0&t=3s',
+      ),
+      VideoResource(
+        title: 'Guided 20 Minute Sleep Meditation',
+        category: 'Meditation & Yoga',
+        videoUrl: 'https://www.youtube.com/watch?v=g0jfhRcXtLQ&t=11s',
       ),
       VideoResource(
         title: 'Bedtime Yoga',
@@ -54,10 +74,9 @@ class VideoRepository {
         videoUrl: 'https://www.youtube.com/watch?v=_ZLqXqG6tRA',
       ),
       VideoResource(
-        title: 'Evening Wind Down Routine',
-        category: 'Meditation & Yoga',
-        videoUrl: 'https://www.youtube.com/watch?v=dLxyqBjvkRg',
-
+          title: 'Evening Wind Down Routine',
+          category: 'Meditation & Yoga',
+          videoUrl: 'https://www.youtube.com/watch?v=dLxyqBjvkRg',
 
 
       ),

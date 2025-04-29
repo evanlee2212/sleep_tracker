@@ -98,7 +98,7 @@ class _VideoPageState extends State<VideoPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppTheme.buildAppBar('Relaxation Videos'),
+      appBar: AppTheme.buildAppBar('Video Resources'),
       body: BackgroundWrapper(
         child: Column(
           children: [
