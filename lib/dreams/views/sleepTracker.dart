@@ -1,4 +1,5 @@
-//create a log that tracks each time the sleep tracker is used and saved the time the user has been asleep on the same page
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sleep_app/dreams/views/sleepDiary.dart';
 import 'dart:async';
@@ -110,8 +111,11 @@ class _SleepTrackerState extends State<SleepTracker> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sleep Summary'),
-        content: Text('You slept for $durationInHours hours.\nSleep quality: $quality/10\nAdd to Sleep Diary?'),
+        title: Text('Sleep Summary', style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+        content: Text(
+          'You slept for $durationInHours hours.\nSleep quality: $quality/10\nAdd to Sleep Diary?',
+          style: GoogleFonts.poppins(),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -182,22 +186,30 @@ class _SleepTrackerState extends State<SleepTracker> {
                     const Divider(height: 30, thickness: 1.5),
                     SizedBox(
                       height: 400,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: presenter.getSleepLogsLength(),
-                        itemBuilder: (context, index) {
-                          final log = presenter.getLog(index);
-                          return Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            elevation: 3,
-                            child: ListTile(
-                              leading: const Icon(Icons.bedtime, color: Colors.deepPurpleAccent),
-                              title: Text('Duration: ${log['duration']}', style: GoogleFonts.poppins()),
-                              subtitle: Text('Time: ${log['time']}\nQuality: ${log['quality']}/10', style: GoogleFonts.poppins()),
+                      child: presenter.getSleepLogsLength() > 0
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: presenter.getSleepLogsLength(),
+                              itemBuilder: (context, index) {
+                                final log = presenter.getLog(index);
+                                return Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  elevation: 3,
+                                  child: ListTile(
+                                    leading: const Icon(Icons.bedtime, color: Colors.deepPurpleAccent),
+                                    title: Text('Duration: ${log['duration']}', style: GoogleFonts.poppins()),
+                                    subtitle: Text('Time: ${log['time']}\nQuality: ${log['quality']}/10', style: GoogleFonts.poppins()),
+                                    trailing: IconButton(
+                                      onPressed: (){ _deleteLog(index); },
+                                      icon: const Icon(Icons.delete),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text('No sleep logs yet.', style: GoogleFonts.poppins(fontSize: 16)),
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),
@@ -207,5 +219,27 @@ class _SleepTrackerState extends State<SleepTracker> {
         ),
       ),
     );
+  }
+
+  void _deleteLog(int index) async {
+    final log = presenter.getLog(index);
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('sleep_logs')
+          .where('time', isEqualTo: log['time'])
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
+      }
+    }
+
+    setState(() {
+      presenter.removeSleepLog(index);
+    });
   }
 }

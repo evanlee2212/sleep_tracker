@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:sleep_app/dreams/viewmodel/sleepTrackerModel.dart';
@@ -20,5 +19,9 @@ class sleepTrackerPresenter {
 
   Future<void> fetchEntries() {
     return model.fetchEntries();
+  }
+
+  void removeSleepLog(int index) {
+    model.Logs.removeAt(index);
   }
 }
