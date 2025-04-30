@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
 import '../../components/theme.dart';
 
-void main() => runApp(const SleepSoundApp());
+// void main() => runApp(const SleepSoundApp());
 
-class SleepSoundApp extends StatelessWidget {
-  const SleepSoundApp({super.key});
+class SleepSoundPage extends StatelessWidget {
+  const SleepSoundPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      home: const SoundTabs(),
+    return Scaffold(
+      body: SoundTabs(),
     );
   }
 }
+
 
 class SoundTabs extends StatefulWidget {
   const SoundTabs({super.key});
@@ -30,10 +31,21 @@ class _SoundTabsState extends State<SoundTabs> {
   int _selectedIndex = 0;
   List<String> favorites = [];
 
+  final List<String> _titles = ['All Sounds', 'Favorites', 'Custom'];
+
   @override
   void initState() {
     super.initState();
     _loadFavorites();
+
+    // 🔹 Status bar dark icons for white AppBar
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
   }
 
   void _loadFavorites() async {
@@ -52,7 +64,21 @@ class _SoundTabsState extends State<SoundTabs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppTheme.buildAppBar(['All Sounds', 'Favorites', 'Custom'][_selectedIndex]),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: Text(
+          _titles[_selectedIndex],
+          style: const TextStyle(color: Colors.black),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context), // ⬅️ This will now go back to ResourcesPage
+        ),
+      ),
+
       body: BackgroundWrapper(
         child: IndexedStack(
           index: _selectedIndex,
@@ -75,6 +101,7 @@ class _SoundTabsState extends State<SoundTabs> {
     );
   }
 }
+
 
 class EqualizerPainter extends CustomPainter {
   final List<double> bars;
