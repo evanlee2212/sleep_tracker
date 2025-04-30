@@ -30,8 +30,10 @@ class _ResourcesPageState extends State<ResourcesPage>
   void navigateToSounds() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const SleepSoundApp()),
+      MaterialPageRoute(builder: (_) => const SleepSoundPage()),
     );
+
+
   }
 
   @override
