@@ -22,16 +22,35 @@ class _ShortsPageState extends State<ShortsPage> {
       )
       ..setNavigationDelegate(NavigationDelegate(
         onPageFinished: (String url) async {
-          // Wait and then click the first short
-          await Future.delayed(const Duration(seconds: 3)); // Let the page load
-          await _controller.runJavaScript('''
+          // Wait long enough to fully render
+          await Future.delayed(const Duration(seconds: 6));
+
+          // Attempt 1: click based on caption match
+          final result = await _controller.runJavaScriptReturningResult('''
             (function() {
-              let firstShort = document.querySelector('ytd-rich-grid-video-renderer a#thumbnail');
-              if (firstShort) {
-                firstShort.click();
+              const elements = document.querySelectorAll('a#thumbnail');
+              for (let el of elements) {
+                const parent = el.closest('ytd-rich-grid-video-renderer');
+                if (parent && parent.innerText.includes("What’s on your reading list")) {
+                  el.scrollIntoView({behavior: "smooth", block: "center"});
+                  el.click();
+                  return "Clicked based on caption";
+                }
               }
+              return "Caption not found";
             })();
           ''');
+
+          if (result.toString().contains("Caption not found")) {
+            // Fallback: scroll and click a fixed position (¾ down, left side)
+            await _controller.runJavaScript('''
+              window.scrollTo(0, document.body.scrollHeight * 0.1);
+              setTimeout(() => {
+                const el = document.querySelector('ytd-rich-grid-video-renderer a#thumbnail');
+                if (el) el.click();
+              }, 1500);
+            ''');
+          }
         },
       ))
       ..loadRequest(Uri.parse('https://www.youtube.com/@calm/shorts'));
