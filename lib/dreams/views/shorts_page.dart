@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ShortsPage extends StatefulWidget {
@@ -15,6 +16,15 @@ class _ShortsPageState extends State<ShortsPage> {
   void initState() {
     super.initState();
 
+    // Set status bar icons to dark (for white background)
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setUserAgent(
@@ -22,17 +32,15 @@ class _ShortsPageState extends State<ShortsPage> {
       )
       ..setNavigationDelegate(NavigationDelegate(
         onPageFinished: (String url) async {
-          // Wait long enough to fully render
-          await Future.delayed(const Duration(seconds: 6));
+          await Future.delayed(const Duration(seconds: 3)); // shorter delay
 
-          // Attempt 1: click based on caption match
           final result = await _controller.runJavaScriptReturningResult('''
             (function() {
               const elements = document.querySelectorAll('a#thumbnail');
               for (let el of elements) {
                 const parent = el.closest('ytd-rich-grid-video-renderer');
                 if (parent && parent.innerText.includes("What’s on your reading list")) {
-                  el.scrollIntoView({behavior: "smooth", block: "center"});
+                  window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 0);
                   el.click();
                   return "Clicked based on caption";
                 }
@@ -42,13 +50,12 @@ class _ShortsPageState extends State<ShortsPage> {
           ''');
 
           if (result.toString().contains("Caption not found")) {
-            // Fallback: scroll and click a fixed position (¾ down, left side)
             await _controller.runJavaScript('''
               window.scrollTo(0, document.body.scrollHeight * 0.1);
               setTimeout(() => {
                 const el = document.querySelector('ytd-rich-grid-video-renderer a#thumbnail');
                 if (el) el.click();
-              }, 1500);
+              }, 0); // fast fallback click
             ''');
           }
         },
@@ -60,8 +67,18 @@ class _ShortsPageState extends State<ShortsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calm Shorts'),
-        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          'Calm Shorts',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 1,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: WebViewWidget(controller: _controller),
     );
