@@ -5,6 +5,8 @@ import 'package:sleep_app/dreams/contracts/resources_contract.dart';
 import 'package:sleep_app/dreams/presenter/resources_presenter.dart';
 import 'package:sleep_app/dreams/views/video_page.dart';
 import 'package:sleep_app/dreams/views/assessment_page.dart';
+import 'package:sleep_app/dreams/views/shorts_page.dart';
+
 import '../../components/theme.dart';
 
 class ResourcesPage extends StatefulWidget {
@@ -47,6 +49,14 @@ class _ResourcesPageState extends State<ResourcesPage>
     );
   }
 
+  void navigateToShorts() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ShortsPage()),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +71,8 @@ class _ResourcesPageState extends State<ResourcesPage>
               elevation: 6,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-                child: Column(
+                child:
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     MenuButton(
@@ -78,8 +89,14 @@ class _ResourcesPageState extends State<ResourcesPage>
                       text: 'Assessment',
                       onPressed: navigateToAssessment,
                     ),
+                    const SizedBox(height: 16),
+                    MenuButton(
+                      text: 'Shorts',
+                      onPressed: navigateToShorts,
+                    ),
                   ],
                 ),
+
               ),
             ),
           ),
