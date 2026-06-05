@@ -1,17 +1,9 @@
 # sleep_app
 
-A new Flutter project.
+A Flutter project to track sleep, set alarms, play white noise, and journal.
 
-## Getting Started
+This was a course project designed to simulate a real world scenario developed in only 6 weeks. In a group of 6 people and a scrum master, we utilized sprints to quickly develop a functional app
 
-This project is a starting point for a Flutter application.
+Not only was the project a good way to practice an agile workflow, but was also an experience for learning a new programming language on the fly. Before the start of the project no one on the team understood what Flutter was. But by the end of it, we were all confident in our abilities and proceeded to make a similar app in a fraction of the time
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 # TeamDream
