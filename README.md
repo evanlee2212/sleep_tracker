@@ -7,7 +7,6 @@ This was a course project designed to simulate a real world scenario developed i
 Not only was the project a good way to practice an agile workflow, but was also an experience for learning a new programming language on the fly. Before the start of the project no one on the team understood what Flutter was. But by the end of it, we were all confident in our abilities and proceeded to make a similar app in a fraction of the time
 
 # TeamDream
-<img width="123" height="270" alt="Opera Snapshot_2026-06-05_124817_www canva com" src="https://github.com/user-attachments/assets/59be8388-d083-4c7f-8493-2f486ad00147" />
+<img width="215" height="495" alt="Opera Snapshot_2026-06-05_124817_www canva com" src="https://github.com/user-attachments/assets/59be8388-d083-4c7f-8493-2f486ad00147" />
 <img width="437" height="495" alt="Opera Snapshot_2026-06-05_124611_www canva com" src="https://github.com/user-attachments/assets/b49c4917-d1d7-419b-b3db-615c1141fef2" />
-<img width="123" height="270" alt="Opera Snapshot_2026-06-05_124817_www canva com" src="https://github.com/user-attachments/assets/992dc826-2fe6-4f50-88e8-38d57558cec5" />
 
